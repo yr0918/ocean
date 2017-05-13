@@ -1,6 +1,7 @@
 public class Algorithm {
     /**
      * 归并排序：复杂度n*log2n，空间o(1)
+     * 将数据分组group=length/2，然后针对分组后的数据进行合并操作(每次合并需要group个新的空间来存放排序后的数据)
      * 实现思路：
      * 1.从中间开始归并
      * 2.递归归并左边，递归归并右边
@@ -30,45 +31,42 @@ public class Algorithm {
             int mid = (to + from) / 2;
             mergeSort(data, from, mid);//分解排序左边数据
             mergeSort(data, mid + 1, to);//分解排序右边数据
-            mergeSortMergeData(data, from, mid, to);//合并数据
-        }
-    }
 
-    private static void mergeSortMergeData(int[] data, int from, int mid, int to) {
-        int[] mergedData = new int[to - from + 1];//排序后的数据
-        int mergeDataIndex = 0;
-        int fromIndex = from;//from游标
-        int toIndex = mid + 1;//to游标
-        while (fromIndex <= mid && toIndex <= to) {
-            if (data[fromIndex] <= data[toIndex]) {
+            //合并数据
+            int[] mergedData = new int[to - from + 1];//排序后的数据
+            int mergeDataIndex = 0;
+            int fromIndex = from;//from游标
+            int toIndex = mid + 1;//to游标
+            while (fromIndex <= mid && toIndex <= to) {
+                if (data[fromIndex] <= data[toIndex]) {
+                    mergedData[mergeDataIndex++] = data[fromIndex++];
+                } else {
+                    mergedData[mergeDataIndex++] = data[toIndex++];
+                }
+            }
+            while (fromIndex < mid) {//填充from中的已排序的数据
                 mergedData[mergeDataIndex++] = data[fromIndex++];
-            } else {
+            }
+            while (toIndex < to) {
                 mergedData[mergeDataIndex++] = data[toIndex++];
             }
+            System.arraycopy(mergedData, 0, data, from, mergedData.length);
         }
-        while (fromIndex < mid) {//填充from中的已排序的数据
-            mergedData[mergeDataIndex++] = data[fromIndex++];
-        }
-        while (toIndex < to) {
-            mergedData[mergeDataIndex++] = data[toIndex++];
-        }
-//        System.out.print(from + "-" + mid + "-" + to + ":");
-//        print(mergedData);
-        System.arraycopy(mergedData, 0, data, from, mergedData.length);
-//        mergeDataIndex = 0;
-//        while (mergeDataIndex < mergedData.length) {
-//            data[from++] = mergedData[mergeDataIndex++];
-//        }
     }
 
     /**
      * 交换排序：冒泡排序 0(n的平方)
+     * 比较相邻的两个元素，大的下沉，小的上浮
      *
      * @param data
      */
     public static void bubbleSort(int[] data) {
+        if (data == null || data.length == 0) {
+            return;
+        }
+
         for (int i = 0; i < data.length; i++) {
-            for (int j = 0; j < data.length - i - 1; j++) {
+            for (int j = 0; j < data.length - i - 1; j++) {//扫描未排好序的data.length-i-1区段
                 if (data[j] > data[j + 1]) {
                     int temp = data[j];
                     data[j] = data[j + 1];
@@ -79,11 +77,15 @@ public class Algorithm {
     }
 
     /**
-     * 快速排序
+     * 交互排序:快速排序
+     * 选择一个基准元素，一次扫描后分成一部分小于基准、一部分大于基准
      *
      * @param data
      */
     public static void quickSort(int[] data, int from, int to) {
+        if (data == null || data.length == 0) {
+            return;
+        }
         if (from < to) {
             int fromIndex = from, toIndex = to;
             int midData = data[fromIndex];
@@ -107,41 +109,72 @@ public class Algorithm {
         }
     }
 
-    public static void quickSort1(int[] targetArr, int start, int end) {
-        if (start < end) {
-            int i = start, j = end;
-            int key = targetArr[start];
-            while (i < j) {
-/*按j--方向遍历目标数组，直到比key小的值为止*/
-                while (j > i && targetArr[j] >= key) {
-                    j--;
-                }
-                if (i < j) {
-/*targetArr[i]已经保存在key中，可将后面的数填入*/
-                    targetArr[i] = targetArr[j];
-                    i++;
-                }
-/*按i++方向遍历目标数组，直到比key大的值为止*/
-                while (i < j && targetArr[i] <= key)
-/*此处一定要小于等于零，假设数组之内有一亿个1，0交替出现的话，而key的值又恰巧是1的话，那么这个小于等于的作用就会使下面的if语句少执行一亿次。*/ {
-                    i++;
-                }
-                if (i < j) {
-/*targetArr[j]已保存在targetArr[i]中，可将前面的值填入*/
-                    targetArr[j] = targetArr[i];
-                    j--;
+
+    /**
+     * 插入排序:直接插入
+     * 将第n个元素插入到前面已经有序的n-1个元素当做
+     *
+     * @param data
+     */
+    public static void insertSort(int[] data) {
+        if (data == null || data.length == 0) {
+            return;
+        }
+        for (int i = 1; i < data.length; i++) {
+            for (int j = i; j > 0; j--) {
+                if (data[j - 1] > data[j]) {
+                    int temp = data[j];
+                    data[j] = data[j - 1];
+                    data[j - 1] = temp;
                 }
             }
-/*此时i==j*/
-            targetArr[i] = key;
+        }
+    }
 
-/*递归调用，把key前面的完成排序*/
-            quickSort1(targetArr, start, i - 1);
+    /**
+     * 插入排序:希尔排序
+     * 选择一个步长gap=length/2，然后对所对于的gap,gap+gap,gap+gap+gap...元素进行直接插入排序，整个过程直到gap=1结束
+     *
+     * @param data
+     */
+    public static void shellSort(int[] data) {
+        if (data == null || data.length == 0) {
+            return;
+        }
 
-
-/*递归调用，把key后面的完成排序*/
-            quickSort1(targetArr, j + 1, end);
+        for (int gap = data.length / 2; gap > 0; gap /= 2) {//计算步长
+            for (int i = gap; i < data.length; i++) {//
+                for (int j = i - gap; j >= 0; j -= gap) {
+                    if (data[j] > data[j + gap]) {
+                        int temp = data[j];
+                        data[j] = data[j + gap];
+                        data[j + gap] = temp;
+                    }
+                }
+            }
         }
 
     }
+
+    /**
+     * 选择排序:简单选择
+     *
+     * @param data
+     */
+public static void selectSort(int[] data) {
+    if (data == null || data.length == 0) {
+        return;
+    }
+    for (int i = 0; i < data.length; i++) {
+        int position = i;
+        for (int j = i + 1; j < data.length; j++) {
+            if (data[j] < data[position]) {
+                position = j;
+            }
+        }
+        int temp = data[position];
+        data[position] = data[i];
+        data[i] = temp;
+    }
+}
 }
