@@ -62,7 +62,11 @@
 3. 局部性原理与磁盘预读
 
 ##### MyISAM存储引擎索引实现 `“非聚集”索引`
+主索引的B+数图
+
 ![主索引的B+数图](https://github.com/yr0918/ocean/raw/master/doc/img/mysql_myisam_btree_primary_key.png)
+
+辅助引的B+数图
 
 ![辅助引的B+数图](https://github.com/yr0918/ocean/raw/master/doc/img/mysql_myisam_btree_sencond_key.png)
 
@@ -71,7 +75,11 @@
 3. 主索引和辅助索引（Secondary key）在结构上没有任何区别，只是主索引要求key是唯一的，而辅助索引的key可以重复
 
 ##### InnoDB存储引擎索引实现 `“聚集”索引（叶节点包含了完整的数据记录）`
+主索引的B+数图
+
 ![主索引的B+数图](https://github.com/yr0918/ocean/raw/master/doc/img/mysql_innodb_btree_primary_key.png)
+
+辅助引的B+数图
 
 ![辅助引的B+数图](https://github.com/yr0918/ocean/raw/master/doc/img/mysql_innodb_btree_sencond_key.png)
 
