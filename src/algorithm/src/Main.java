@@ -9,7 +9,8 @@ public class Main {
 //        Algorithm.quickSort(data, 0, data.length - 1);
 //        Algorithm.insertSort(data);
 //        Algorithm.shellSort(data);
-        Algorithm.selectSort(data);
+//        Algorithm.selectSort(data);
+        Algorithm.heapSort(data);
         System.out.print("after:");
         Print.print(data);
     }

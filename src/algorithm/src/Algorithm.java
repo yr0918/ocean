@@ -161,20 +161,62 @@ public class Algorithm {
      *
      * @param data
      */
-public static void selectSort(int[] data) {
+    public static void selectSort(int[] data) {
+        if (data == null || data.length == 0) {
+            return;
+        }
+        for (int i = 0; i < data.length; i++) {
+            int position = i;
+            for (int j = i + 1; j < data.length; j++) {
+                if (data[j] < data[position]) {
+                    position = j;
+                }
+            }
+            int temp = data[position];
+            data[position] = data[i];
+            data[i] = temp;
+        }
+    }
+
+    /**
+     * 选择排序：堆排序
+     *
+     * @param data
+     */
+public static void heapSort(int[] data) {
     if (data == null || data.length == 0) {
         return;
     }
-    for (int i = 0; i < data.length; i++) {
-        int position = i;
-        for (int j = i + 1; j < data.length; j++) {
-            if (data[j] < data[position]) {
-                position = j;
-            }
-        }
-        int temp = data[position];
-        data[position] = data[i];
-        data[i] = temp;
+    //构建大顶堆，其实就是调整顺序,保证每个父节点都大于2个字节点
+    for (int i = data.length / 2; i >= 0; i--) {//根据完全二叉树定义<data.length/2都为父节点
+        buildHeap(data, i, data.length);
     }
+
+    //逐个交换最大的值
+    for (int i = data.length - 1; i > 0; i--) {
+        int temp = data[0];
+        data[0] = data[i];
+        data[i] = temp;
+        buildHeap(data, 0, i);
+    }
+}
+
+private static void buildHeap(int[] data, int parent, int length) {
+    int parentValue = data[parent];
+    int child = 2 * parent + 1;//左孩子
+    while (child < length) {
+        //比较右孩子，取值大
+        if (child + 1 < length && data[child + 1] > data[child]) {
+            child++;
+        }
+        if (data[child] > parentValue) {
+            data[parent] = data[child];
+            parent = child;
+            child = 2 * child + 1;//继续检索孙子节点是否符合堆的要求
+        } else {
+            break;
+        }
+    }
+    data[parent] = parentValue;
 }
 }
