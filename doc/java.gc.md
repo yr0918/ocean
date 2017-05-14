@@ -3,6 +3,8 @@
 ![JVM结构](https://github.com/yr0918/ocean/raw/master/doc/img/java.gc.jvm.jpg)
 ![类加载器](https://github.com/yr0918/ocean/raw/master/doc/img/java.gc.jvm.classloader.jpg)
 
+![JVM结构](https://github.com/yr0918/ocean/raw/master/doc/img/java.gc.jvm.2.jpg)
+
 内存区
 
 ![内存区](https://github.com/yr0918/ocean/raw/master/doc/img/java.gc.jvm.memory.jpg)
@@ -90,6 +92,24 @@ c.标记-整理（Mark-Compact）：第一阶段从根节点开始标记所有�
 
 ![](https://github.com/yr0918/ocean/raw/master/doc/img/java.gc.algorithm.mark_compact.png)
 
-`d.分代收集算法`(当前商业虚拟机常用)
+`d.分代收集算法`(当前商业虚拟机常用：居于不同的对象的生命周期是不一样的)
+
+![](https://github.com/yr0918/ocean/raw/master/doc/img/java.gc.algorithm.generation.jpg)
+
+1.  在Young Generation中，有一个叫Eden Space的空间，主要是用来存放新生的对象，还有两个Survivor Spaces（from、to），它们的大小总是一样，它们用来存放每次垃圾回收后存活下来的对象。
+2.  在Old Generation中，主要存放应用程序中生命周期长的内存对象。
+3.  在Young Generation块中，垃圾回收一般用Copying的算法，速度快。每次GC的时候，存活下来的对象首先由Eden拷贝到某个SurvivorSpace，当Survivor Space空间满了后，剩下的live对象就被直接拷贝到OldGeneration中去。因此，每次GC后，Eden内存块会被清空。
+4.  在Old Generation块中，垃圾回收一般用mark-compact的算法，速度慢些，但减少内存要求。
+5.  垃圾回收分多级，0级为全部(Full)的垃圾回收，会回收OLD段中的垃圾；1级或以上为部分垃圾回收，只会回收Young中的垃圾，内存溢出通常发生于OLD段或Perm段垃圾回收后，仍然无内存空间容纳新的Java对象的情况。
+
 
 #### 内存回收器（GC）【具体实现】
+
+1. Serial收集器：单线程收集器，表示在它进行垃圾收集时，必须暂停其他所有的工作线程，直到它收集结束。"Stop The World".
+
+2. ParNew收集器：实际就是Serial收集器的多线程版本。
+ - 并发(Parallel):指多条垃圾收集线程并行工作，但此时用户线程仍然处于等待状态；
+ - 并行(Concurrent):指用户线程与垃圾收集线程同时执行，用户程序在继续运行，而垃圾收集程序运行于另一个CPU上。
+3. Parallel Scavenge收集器：该收集器比较关注吞吐量(Throughout)(CPU用于用户代码的时间与CPU总消耗时间的比值)，保证吞吐量在一个可控的范围内。
+4. CMS(Concurrent Mark Sweep)收集器：CMS收集器是一种以获得最短停顿时间为目标的收集器。
+5. G1(Garbage First)收集器：从JDK1.7 Update 14之后的HotSpot虚拟机正式提供了商用的G1收集器，与其他收集器相比，它具有如下优点：并行与并发；分代收集；空间整合；可预测的停顿等
