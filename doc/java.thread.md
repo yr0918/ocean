@@ -107,10 +107,95 @@ Semaphore维护了当前访问的个数，提供同步机制，控制同时访�
 
 #### 2.3 线程池（管理类）
 
+###### 常用方法介绍
+new  ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, milliseconds,runnableTaskQueue, handler);
+- corePoolSize（线程池的基本大小）：当提交一个任务到线程池时，线程池会创建一个线程来执行任务，即使其他空闲的基本线程能够执行新任务也会创建线程，
+   等到需要执行的任务数大于线程池基本大小时就不再创建。如果调用了线程池的prestartAllCoreThreads方法，线程池会提前创建并启动所有基本线程。
+- runnableTaskQueue（任务队列）：用于保存等待执行的任务的阻塞队列。 可以选择以下几个阻塞队列。
+  - ArrayBlockingQueue：是一个基于数组结构的有界阻塞队列，此队列按 FIFO（先进先出）原则对元素进行排序。
+  - LinkedBlockingQueue：一个基于链表结构的阻塞队列，此队列按FIFO （先进先出） 排序元素，吞吐量通常要高于ArrayBlockingQueue。静态工厂方法Executors.newFixedThreadPool()使用了这个队列。
+  - SynchronousQueue：一个不存储元素的阻塞队列。每个插入操作必须等到另一个线程调用移除操作，否则插入操作一直处于阻塞状态，吞吐量通常要高于LinkedBlockingQueue，静态工厂方法Executors.newCachedThreadPool使用了这个队列。
+  - PriorityBlockingQueue：一个具有优先级的无限阻塞队列。
+- maximumPoolSize（线程池最大大小）：线程池允许创建的最大线程数。如果队列满了，并且已创建的线程数小于最大线程数，则线程池会再创建新的线程执行任务。值得注意的是如果使用了无界的任务队列这个参数就没什么效果。
+- ThreadFactory：用于设置创建线程的工厂，可以通过线程工厂给每个创建出来的线程设置更有意义的名字。
+- RejectedExecutionHandler（饱和策略）：当队列和线程池都满了，说明线程池处于饱和状态，那么必须采取一种策略处理提交的新任务。这个策略默认情况下是AbortPolicy，表示无法处理新任务时抛出异常。以下是JDK1.5提供的四种策略。
+  - AbortPolicy：直接抛出异常。
+  - CallerRunsPolicy：只用调用者所在线程来运行任务。
+  - DiscardOldestPolicy：丢弃队列里最近的一个任务，并执行当前任务。
+  - DiscardPolicy：不处理，丢弃掉。
+  - 当然也可以根据应用场景需要来实现RejectedExecutionHandler接口自定义策略。如记录日志或持久化不能处理的任务。
+- keepAliveTime（线程活动保持时间）：存活时间，分两种情况： (1)allowCoreThreadTimeOut=true，所有线程，一旦创建后，在keepAliveTime时间内，如果没有任务可以执行，则该线程会退出并销毁，
+  这样的好处是系统不忙时可以回收线程资源；(2)allowCoreThreadTimeOut=false，如果总线程数<=corePoolSize，那么这些线程是不会退出的，他们会一直不断的等待任务并执行，
+  哪怕当前没有任务，但如果线程数>corePoolSize，而且一旦一个线程闲的时间超过keepAliveTime则会退出，但一旦降低到corePoolSize，则不会再退出了
+- TimeUnit（线程活动保持时间的单位）：可选的单位有天（DAYS），小时（HOURS），分钟（MINUTES），毫秒(MILLISECONDS)，微秒(MICROSECONDS, 千分之一毫秒)和毫微秒(NANOSECONDS, 千分之一微秒)
+
+Java通过Executors提供四种线程池，分别为：
+- newCachedThreadPool new ThreadPoolExecutor(0, Integer.MAX_VALUE,60L, TimeUnit.SECONDS,new SynchronousQueue<Runnable>()) 创建一个可缓存线程池，如果线程池长度超过处理需要，可灵活回收空闲线程，若无可回收，则新建线程。
+- newFixedThreadPool new ThreadPoolExecutor(nThreads, nThreads,0L, TimeUnit.MILLISECONDS,new LinkedBlockingQueue<Runnable>())创建一个定长线程池，可控制线程最大并发数，超出的线程会在队列中等待。
+- newScheduledThreadPool 创建一个定长线程池，支持定时及周期性任务执行。
+- newSingleThreadExecutor 创建一个单线程化的线程池，它只会用唯一的工作线程来执行任务，保证所有任务按照指定顺序(FIFO, LIFO, 优先级)执行
+
+###### 线程池执行流程
+
+![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.pool.runtime.png)
+
+```java
+public void execute(Runnable command) {
+    if (command == null)
+       throw new NullPointerException();
+    //如果线程数小于基本线程数，则创建线程并执行当前任务
+    if (poolSize >= corePoolSize || !addIfUnderCorePoolSize(command)) {
+    //如线程数大于等于基本线程数或线程创建失败，则将当前任务放到工作队列中。
+        if (runState == RUNNING && workQueue.offer(command)) {
+            if (runState != RUNNING || poolSize == 0)
+                      ensureQueuedTaskHandled(command);
+        }
+    //如果线程池不处于运行中或任务无法放入队列，并且当前线程数量小于最大允许的线程数量，则创建一个线程执行任务。
+        else if (!addIfUnderMaximumPoolSize(command))
+        //抛出RejectedExecutionException异常
+            reject(command); // is shutdown or saturated
+    }
+}
+
+线程池创建线程时，会将线程封装成工作线程Worker，Worker在执行完任务后，还会无限循环获取工作队列里的任务来执行。我们可以从Worker的run方法里看到这点:
+public void run() {
+     try {
+           Runnable task = firstTask;
+           firstTask = null;
+            while (task != null || (task = getTask()) != null) {
+                    runTask(task);
+                    task = null;
+            }
+      } finally {
+             workerDone(this);
+      }
+}
+```
+
+###### 线程池状态
+
+![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.pool.status.png)
+
+`RUNNING状态：`
+创建线程池的时候，线程池的初始状态为 RUNNING，接着就可以提交任务执行了。
+
+`SHUTDOWN状态：`
+当在RUNNING状态调用shutdown()时，线程池状态会被改为SHUTDOWN，这时候，submit任务的时候，会被拒绝，可以使用多种拒绝策略，
+比如最简单就是直接丢弃任务。至于正在执行中的线程，会继续执行，同时会把阻塞队列中的任务也一并执行完毕，等到全部任务执行完毕，线程池会进入 TIDYING状态，等执行钩子方法terminated()之后，就会进入最终状态TERMINATED，这时候，整个线程池完全终止。
+
+`STOP状态：`
+当在RUNNING状态调用shutdownNow()时，线程池状态会被改为STOP，这时候，submit任务会被拒绝，那么如果有任务执行到一半，该怎么处理？其实，执行shutdownNow()时，会中断各个工作线程，所以任务会如何执行要看任务做的是什么事情，有没有处理中断异常。而阻塞队列如何有任务，这些任务将不会再执行，shutdownNow()执行后，将会返回阻塞队列中的未执行的任务列表。
+
+`TIDYING状态：`
+TIDYING只是一个过渡状态，当所有工作线程都停止后，线程池的状态会进入TIDYING，然后执行一个钩子方法terminated()，最后线程池会进入TERMINATED状态。
+
+`TERMINATED状态：`
+线程池终止状态，这个没什么可说的了，大家都明白
+
 #### 2.4 线程安全集合（容器类）
 
 1. ConcurrentMap
-   - ConcurrentHashMap
+   - ConcurrentHashMap：Hashtable和synchonized map都会防止其他线程访问这个map，但是ConcurrentHashMap不一样，它采用的是分段锁，最大16个
    - ConcurrentSkipListMap
 2. List
    - CopyOnWriteArrayList
