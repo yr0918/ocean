@@ -46,7 +46,11 @@ t.join(1000);  //等待 t 线程，等待时间是1000毫秒
 
 ###### 2.2.1 synchronized（块、方法）
 
-###### 2.2.2 Lock锁(公平锁/非公平锁[可插队])AbstractQueuedSynchronizer
+###### 2.2.2 Lock锁
+
+自旋锁：
+
+(公平锁/非公平锁[可插队])AbstractQueuedSynchronizer
 
 ReentrantLock(重入锁)：
  - lock:获取锁，如果锁无法获取，那么当前的线程就变为不可被调度，直到锁被获取到

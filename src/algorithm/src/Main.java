@@ -13,5 +13,7 @@ public class Main {
         Algorithm.heapSort(data);
         System.out.print("after:");
         Print.print(data);
+
+
     }
 }
