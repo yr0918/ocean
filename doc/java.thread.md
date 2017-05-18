@@ -46,9 +46,30 @@ t.join(1000);  //等待 t 线程，等待时间是1000毫秒
 
 ###### 2.2.1 synchronized（块、方法）
 
+Java Monitor 从两个方面来支持线程之间的同步，即：互斥执行与协作。 Java 使用对象锁 ( 使用 synchronized 获得对象锁 ) 保证工作在共享的数据集上的线程互斥执行 ,
+使用 notify/notifyAll/wait 方法来协同不同线程之间的工作。这些方法在 Object 类上被定义，会被所有的 Java 对象自动继承
+
+以下几种方式获取对象的Monitor
+```
+public synchronize a () {}
+synchronize(obj) {}
+public static synchronize b(){}
+```
+
+![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.synchronized.monitor.jpg)
+
+tips：拥有monitor的是线程
+
+1.同时只能有一个线程可以获取某个对象的monitor
+
+2.一个线程通过调用某个对象的wait()方法释放该对象的monitor并进入休眠状态，直到其他线程调用该对象的notify()或者notifyAll()再次获取该对象的monitor
+
+3.只有拥有该对象monitor的线程才可以调用该对象的notify()和notifyAll()方法，如果没有该对象monitor的线程调用了该对象的notify()或者notifyAll()方法将会抛出java.lang.IllegalMonitorStateException
+
+
 ###### 2.2.2 Lock锁
 
-自旋锁：
+`自旋锁：`
 
 (公平锁/非公平锁[可插队])AbstractQueuedSynchronizer
 
