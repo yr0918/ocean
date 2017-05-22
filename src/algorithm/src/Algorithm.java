@@ -26,6 +26,7 @@ public class Algorithm {
      * 0-3-7:10,12,28,39,40,98,100,299,
      */
     public static void mergeSort(int[] data, int from, int to) {
+
         if (data == null || data.length == 0) {
             return;
         }

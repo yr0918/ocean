@@ -10,7 +10,7 @@
 `TreeMap：`TreeMap实现SortedMap接口，能够把它保存的记录根据键排序，默认是按键值的升序排序，也可以指定排序的比较器，当用Iterator遍历TreeMap时，得到的记录是排过序的
 
 ##### 2.内部实现
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.hashmap.struct.png)
+![](png/java.hashmap.struct.png)
 
 从结构实现来讲，HashMap是数组+链表+红黑树（JDK1.8增加了红黑树部分）实现的
 
@@ -58,14 +58,14 @@ static int indexFor(int h, int length) {  //jdk1.7的源码，jdk1.8没有这个
 
 `2.高位运算` JAVA8 通过hashCode()的高16位异或低16位实现，主要是从速度、功效、质量来考虑的
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.hashmap.hascode.mod.png)
+![](png/java.hashmap.hascode.mod.png)
 
 `3.取模运算`
 
 
 ###### put方法的详细执行
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.hashmap.put.method.png)
+![](png/java.hashmap.put.method.png)
 
 1. 判断键值对数组table[i]是否为空或为null，否则执行resize()进行扩容；
 2. 根据键值key计算hash值得到插入的数组索引i，如果table[i]==null，直接新建节点添加，转向⑥，如果table[i]不为空，转向③；
