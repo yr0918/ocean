@@ -1,5 +1,18 @@
 
 ### 1 volatile原理（不能实现锁/同步功能，是个辅助）
+1. `保证线程之间变量的可见性`
+2. `禁止指令重排序`
+3. 不能保证程序的原子性/一定程度保证有序性
+4. 场景：多线程的状态标记量；单实例的double check
+
+###### 2.1.1 多线程的内存模型
+
+1.  原子性：即一个操作或者多个操作 要么全部执行并且执行的过程不会被任何因素打断，要么就都不执行
+2. 可见性：可见性是指当多个线程访问同一个变量时，一个线程修改了这个变量的值，其他线程能够立即看得到修改的值
+3. 有序性：即程序执行的顺序按照代码的先后顺序执行；happens-before规则
+
+![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.memory.1.png)
+![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.memory.2.png)
 
 ### 2.锁
 
