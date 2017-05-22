@@ -1,16 +1,13 @@
 # Java Collections Framework Internals
 
-# Authors（原作者）
-
-| Name | Weibo Id | Blog | Mail |
-|:-----------|:-------------|:-------------|:-----------|
-| 李豪 |[@计算所的小鼠标](http://weibo.com/icttinymouse) | [CarpenterLee](http://www.cnblogs.com/CarpenterLee/) | hooleeucas@163.com |
-
 # Introduction
 
-关于*C++标准模板库(Standard Template Library, STL)*的书籍和资料有很多，关于*Java集合框架(Java Collections Framework, JCF)*的资料却很少，甚至很难找到一本专门介绍它的书籍，这给Java学习者们带来不小的麻烦。我深深的不解其中的原因。**虽然JCF设计参考了STL，但其定位不是Java版的STL，而是要实现一个精简紧凑的容器框架**，对STL的介绍自然不能替代对JCF的介绍。
+本部分内容大部分是引用 [CarpenterLee](http://www.cnblogs.com/CarpenterLee/) ,有部分做了修改，并且新增了Concurrent下集合的内容
 
-本系列文章主要从**数据结构和算法**层面分析JCF中List, Set, Map, Stack, Queue等典型容器，**结合生动图解和源代码，帮助读者对Java集合框架建立清晰而深入的理解**。本文并不特意介绍Java的语言特性，但会在需要的时候做出简洁的解释。
+# 前提知识
+
+1. [基本数据结构](https://github.com/yr0918/ocean/blob/master/doc/java.collect/java.collect.datastructure.md) 基本的数据结构链表、栈、队列、树、图等的介绍。
+2. [常用算法](https://github.com/yr0918/ocean/blob/master/doc/java.collect/java.collect.algorithm.md) 常用算法介绍，比如选择、插入、冒泡、希尔、堆、快速、归并等排序。
 
 # Contents
 
@@ -25,3 +22,6 @@
 7. [LinkedHashSet and LinkedHashMap](https://github.com/yr0918/ocean/blob/master/doc/java.collect/7-LinkedHashSet%20and%20LinkedHashMap.md) 结合源码对*LinkedHashSet*和*LinkedHashMap*进行讲解。
 8. [PriorityQueue](https://github.com/yr0918/ocean/blob/master/doc/java.collect/8-PriorityQueue.md) 结合源码对*PriorityQueue*进行讲解。
 9. [WeakHashMap](https://github.com/yr0918/ocean/blob/master/doc/java.collect/9-WeakHashMap.md) 对*WeakHashMap*做出基本介绍。
+10. `待完成`[BlockingDeque](https://github.com/yr0918/ocean/blob/master/doc/java.collect/java.concurrent.BlockingDeque.md) 对\**Deque*做出基本介绍。
+11. `待完成`[CopyOnWrite](https://github.com/yr0918/ocean/blob/master/doc/java.collect/java.concurrent.CopyOnWrite.md) 对*CopyOnWrite*\*做出基本介绍。
+12. `待完成`[ConcurrentMap](https://github.com/yr0918/ocean/blob/master/doc/java.collect/java.concurrent.ConcurrentMap.md) 对*ConcurrentMap*做出基本介绍。

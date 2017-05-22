@@ -56,7 +56,7 @@
  1. 最大只能2个子节点
  2. 层数为i的节点最多有2的i次方个节点i >=0
 
-![满二叉树/完全二叉树](https://github.com/yr0918/ocean/raw/master/doc/img/full_bi_tree.png)
+![满二叉树/完全二叉树](png/full_bi_tree.png)
 ##### 5.2满二叉树
 除最后一层无任何子节点外，每一层上的所有结点都有两个子结点。也可以这样理解
 除叶子结点外的所有结点均有两个子结点。节点数达到最大值，所有叶子结点必须在同一层上
@@ -95,13 +95,13 @@
 3. 左右旋转
 4. 右左旋转
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/avl_tree_right_rote.jpg)
-![](https://github.com/yr0918/ocean/raw/master/doc/img/avl_tree_left_right_rote.jpg)
+![](png/avl_tree_right_rote.jpg)
+![](png/avl_tree_left_right_rote.jpg)
 ###### 5.5.1平衡查找树AVL树
 平衡因子：二叉树上节点的左子树的深度减去它右子树的深度的值
 `AVL要求左右子树深度差不能超过1`
 ###### 5.5.2平衡查找树红黑树
-![](https://github.com/yr0918/ocean/raw/master/doc/img/red-black_tree.png)
+![](png/red-black_tree.png)
 
 https://zhuanlan.zhihu.com/p/24687801?refer=dreawer
 
@@ -126,7 +126,7 @@ B树作为一种多路搜索树：
 7. 非叶子结点的指针：P[1], P[2], …, P[M]；其中P[1]指向关键字小于K[1]的子树，P[M]指向关键字大于K[M-1]的子树，其它P[i]指向关键字属于(K[i-1], K[i])的子树；
 8. 所有叶子结点位于同一层；
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/btree.jpg)
+![](png/btree.jpg)
 
 ###### 5.6.1 B+树
 1. 其定义基本与B-树相同，除了：
@@ -141,11 +141,11 @@ B树作为一种多路搜索树：
 3. 非叶子结点相当于是叶子结点的索引（稀疏索引），叶子结点相当于是存储（关键字）数据的数据层；
 4. 更适合文件索引系统
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/b+tree.jpg)
+![](png/b+tree.jpg)
 
 ###### 5.6.2 B*树
 在B+树的非根和非叶子结点再增加指向兄弟的指针，将结点的最低利用率从1/2提高到2/3
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/bxingtree.jpg)
+![](png/bxingtree.jpg)
 
 # 6.图
