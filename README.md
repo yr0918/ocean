@@ -14,11 +14,14 @@ java加密
 JVM的细节，性能优化的经验，网络、安全等知识。当作优秀的应届生用，
 可以，但把一个服务交给他一个人，心里没底
 
+数据库锁、sessionfactory的锁机制、面向对象的里氏原则，构造方法能被重写吗？、常用设计模式
+
 数据库的分库/分表实现
 单点登录/安全网关
 
 java8中的流实现原理
 http://www.cnblogs.com/CarpenterLee/p/6729368.html
+https://github.com/CarpenterLee/JavaLambdaInternals
 
 java集合+数据结构、io
 
@@ -37,6 +40,8 @@ rabbitmq
 NGINX
 
 安全、网络
+
+负载均衡算法：https://my.oschina.net/tanwen/blog/534632
 
 tcp/ip，http网络
 常用设计模式

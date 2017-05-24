@@ -105,11 +105,23 @@ c.标记-整理（Mark-Compact）：第一阶段从根节点开始标记所有�
 
 #### 内存回收器（GC）【具体实现】
 
-1. Serial收集器：单线程收集器，表示在它进行垃圾收集时，必须暂停其他所有的工作线程，直到它收集结束。"Stop The World".
+![](img/java.gc.collector.png)
 
+1. Serial收集器：单线程收集器，表示在它进行垃圾收集时，必须暂停其他所有的工作线程，直到它收集结束。"Stop The World".
 2. ParNew收集器：实际就是Serial收集器的多线程版本。
  - 并发(Parallel):指多条垃圾收集线程并行工作，但此时用户线程仍然处于等待状态；
  - 并行(Concurrent):指用户线程与垃圾收集线程同时执行，用户程序在继续运行，而垃圾收集程序运行于另一个CPU上。
 3. Parallel Scavenge收集器：该收集器比较关注吞吐量(Throughout)(CPU用于用户代码的时间与CPU总消耗时间的比值)，保证吞吐量在一个可控的范围内。
-4. CMS(Concurrent Mark Sweep)收集器：CMS收集器是一种以获得最短停顿时间为目标的收集器。
-5. G1(Garbage First)收集器：从JDK1.7 Update 14之后的HotSpot虚拟机正式提供了商用的G1收集器，与其他收集器相比，它具有如下优点：并行与并发；分代收集；空间整合；可预测的停顿等
+
+4. CMS(Concurrent Mark Sweep)收集器：CMS收集器是一种以获得最短停顿时间为目标的收集器,CMS收集器是基于“标记-清除”算法实现的
+ - CMS对收集器对CPU资源非常敏感。
+ - CMS无法处理浮动垃圾
+ - CMS 是基于“标记-清除”算法的收集器，会产生大量的空间碎片
+5. Serial Old收集器：Serial Old收集器是Serial收集器的老年代版本，同样是一个单线程收集器，使用“标记-整理”算法。这个收集器的主要意义也是在于Client模式下的虚拟机使用
+ - 一种用途是在JDK1.5以及之前的版本与Parallel Scavenge收集器搭配使用。
+ - 另一种用途就是作为CMS收集器的后备预案，在并发收集发生Concurrent Mode Failure时使用
+6. Parallel Old收集器：Parallel old 是Parallel Scavenge收集器的老年代版本，使用多线程和“标记-整理”算法。这个收集器是JDK6才出现的，在之前Parallel Scavenge一直处于尴尬状态
+7. G1(Garbage First)收集器：从JDK1.7 Update 14之后的HotSpot虚拟机正式提供了商用的G1收集器，与其他收集器相比，它具有如下优点：并行与并发；分代收集；空间整合；可预测的停顿等
+
+#### 实践
+gc日志分析工具：http://mp.weixin.qq.com/s/eztcZn1S8LkylgZoMO5pHw
