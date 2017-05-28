@@ -177,5 +177,6 @@ synchronized或者lock
 1. 使用memcached的cas()方法，用于分布式锁。
 2. 使用redis的watch、multi、exec命令，用于分布式锁。
 3. 使用zookeeper，用于分布式锁。
-4. 基于Chubby分布式的文件的分布式锁
+4. redis官方推荐的redlock
+5. 基于Chubby分布式的文件的分布式锁
 
