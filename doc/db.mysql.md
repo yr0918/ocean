@@ -28,4 +28,13 @@
  - 注意ON 子句和 WHERE 子句的不同
  - 尽量避免子查询，而用join
 
- ## 分库分别实践
+ ## 实践
+
+分布式环境下的更新：
+https://mp.weixin.qq.com/s/_XlzbmBSj_i-S2PkE5tI_w
+
+分布式环境下的插入：
+ http://blog.csdn.net/lululove19870526/article/details/60592981
+https://my.oschina.net/mays/blog/809864
+
+ https://mp.weixin.qq.com/s/B9FHHM-NCZvtn7xnawYl1w
