@@ -43,6 +43,12 @@ NGINX
 
 负载均衡算法：https://my.oschina.net/tanwen/blog/534632
 
+pojo,jdo,jdbc,jta,jts,jndi
+j2se与j2ee的内容区别比较
+cas单点登录
+TDDL作分库分表技术
+TAIR K/V的内存和文件形式的缓存
+
 tcp/ip，http网络
 常用设计模式
 JVM内存，堆栈结构；
