@@ -1,15 +1,10 @@
+import java.util.Arrays;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
 
     public static void main(String[] args) {
-        Scanner xx = new Scanner(System.in);
-        System.out.print("enter a number: ");//println换行；print不换行
-        int number = xx.nextInt();//数据类型为int
-        int number2 = 2 * number;
-        System.out.println("number = " + number);
-        System.out.println("number2 = " + number2);
-
         int[] data = new int[]{12, 98, 100, 28, 299, 39, 10, 28, 40};
         Print.print(data);
 //        Algorithm.mergeSort(data, 0, data.length - 1);
@@ -21,5 +16,16 @@ public class Main {
         Algorithm.heapSort(data);
         System.out.print("after:");
         Print.print(data);
+
+        SearchHighlight s = new SearchHighlight(Arrays.asList("叶溶宝", "金刚葫芦娃", "树叶", "溶宝王"));
+        Scanner xx = new Scanner(System.in);
+        System.out.println("请输入:");
+        String line = xx.nextLine();
+        while (!"q".equals(line)) {
+            List<String> result = s.search(line);
+            Print.print(result);
+            System.out.println("请输入:");
+            line = xx.nextLine();
+        }
     }
 }
