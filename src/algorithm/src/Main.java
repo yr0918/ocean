@@ -17,7 +17,7 @@ public class Main {
         System.out.print("after:");
         Print.print(data);
 
-        SearchHighlight s = new SearchHighlight(Arrays.asList("叶溶宝", "金刚葫芦娃", "树叶", "溶宝王"));
+        SearchHighlight s = new SearchHighlight(Arrays.asList("叶溶宝", "金刚葫芦娃", "树叶", "溶宝王","看见那个人看见","我看见你看见"));
         Scanner xx = new Scanner(System.in);
         System.out.println("请输入:");
         String line = xx.nextLine();

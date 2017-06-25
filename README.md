@@ -48,10 +48,14 @@ j2se与j2ee的内容区别比较
 cas单点登录
 TDDL作分库分表技术
 TAIR K/V的内存和文件形式的缓存
+JoinWork工作流
+HikariCP、druid数据库连接池
 
 tcp/ip，http网络
-常用设计模式
+常用设计模式：http://blog.csdn.net/hguisu/article/category/1133340
+  装饰器模式，观察者模式，责任链模式，单例模式，工场模式，
 JVM内存，堆栈结构；
+
 blcokingq实现？中间件的实现？分库分表，DB的优化？多线程？手写一个字符串转成double？
 http://mp.weixin.qq.com/s/f1VB0-go0WDUil2zmPVJfA
 http://mp.weixin.qq.com/s/CVlFWzZziI4RnNqwL50IxA
