@@ -42,6 +42,12 @@ eureka-server模块:
 
 #### 2.2.3 负载均衡Server节点之间同步
 
+使用者是如何及时知道Client的状态？
+
+路由表会缓存到或者存储到那些机器上？client?server?
+
+server群集中的leader机制？
+
 #### 2.2. REST FULL接口
 https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
 
