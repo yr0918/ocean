@@ -3,7 +3,8 @@ Github源码：https://github.com/Netflix/eureka
 http://blog.csdn.net/neosmith/article/details/53131023
 http://blog.csdn.net/neosmith/article/details/52912645
 http://www.idouba.net/sping-cloud-and-netflix/
-
+深度剖析服务发现组件Netflix Eureka
+http://techshow.ctrip.com/archives/1699.html?utm_source=tuicool&utm_medium=referral
 
 http://blog.csdn.net/neosmith/article/details/53126924
 
@@ -36,6 +37,13 @@ eureka-server模块:
 
 ### 2.2关键技术点
 
+1. server端如何启动的？
+2. server与server端如何同步数据的？
+3. client如何注册到server中？
+4. client是如何选择哪个server做心跳的？
+5. client(customer)是如何获取client(provider)的？
+6. 路由表数据如何缓存在server、client端的？
+
 #### 2.2.1 Client选举算法
 
 #### 2.2.2 Client与Server的心跳
@@ -48,6 +56,8 @@ eureka-server模块:
 
 server群集中的leader机制？
 
+
+
 #### 2.2. REST FULL接口
 https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
 
@@ -55,3 +65,4 @@ https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
 
 ## 4.常用服务治理工具比较
 Eureka,Zookeeper,Consol
+http://www.tuicool.com/articles/zyy2qeZ

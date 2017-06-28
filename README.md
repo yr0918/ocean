@@ -66,3 +66,8 @@ http://mp.weixin.qq.com/s/JAmICaV5utpxgET4oaCX-Q
 http://mp.weixin.qq.com/s/8aI9jS0SXJl5NdcM3TPYuQ
 http://mp.weixin.qq.com/s/QtjpUpl2FF0DKPPHh6HDGg
 http://mp.weixin.qq.com/s/nh3GJneHwPFI9YBH5uJp1Q
+
+携程上万坐席呼叫中心异地双活架构及系统设计
+http://techshow.ctrip.com/archives/1722.html
+携程是如何借助“预测式外呼”提高呼叫效率的
+http://techshow.ctrip.com/archives/1540.html
