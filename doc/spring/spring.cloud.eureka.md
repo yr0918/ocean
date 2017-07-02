@@ -1,12 +1,16 @@
 
-Github源码：https://github.com/Netflix/eureka
-http://blog.csdn.net/neosmith/article/details/53131023
-http://blog.csdn.net/neosmith/article/details/52912645
-http://www.idouba.net/sping-cloud-and-netflix/
+Github源码：
+https://github.com/Netflix/eureka
+
 深度剖析服务发现组件Netflix Eureka
 http://techshow.ctrip.com/archives/1699.html?utm_source=tuicool&utm_medium=referral
 
-http://blog.csdn.net/neosmith/article/details/53126924
+Netflix Eureka 深层解析（上）
+http://blog.csdn.net/u011834741/article/details/54694045
+
+Netflix Eureka 深层解析（下）
+http://blog.csdn.net/u011834741/article/details/54709209
+
 
 ## 1.服务注册/发现理论知识
 
@@ -17,24 +21,6 @@ http://blog.csdn.net/neosmith/article/details/53126924
 4. 定时任务(发送心跳、定时清理过期服务、节点同步等)通过 JDK 自带的 Timer 实现
 5. 内存缓存使用Google的guava包实现
 
-### 2.1代码结构
-eureka-core 模块包含了功能的核心实现:
-
-1. com.netflix.eureka.cluster - 与peer节点复制(replication)相关的功能
-2. com.netflix.eureka.lease - 即”租约”, 用来控制注册信息的生命周期(添加、清除、续约)
-3. com.netflix.eureka.registry - 存储、查询服务注册信息
-4. com.netflix.eureka.resources - RESTful风格中的”R”, 即资源。相当于SpringMVC中的Controller
-5. com.netflix.eureka.transport - 发送HTTP请求的客户端，如发送心跳
-6. com.netflix.eureka.aws - 与amazon AWS服务相关的类
-
-eureka-client模块:
-
-Eureka客户端，微服务通过该客户端与Eureka进行通讯，屏蔽了通讯细节
-
-eureka-server模块:
-
-包含了 servlet 应用的基本配置，如 web.xml。构建成功后在该模块下会生成可部署的war包
-
 ### 2.2关键技术点
 
 1. server端如何启动的？
@@ -43,26 +29,108 @@ eureka-server模块:
 4. client是如何选择哪个server做心跳的？
 5. client(customer)是如何获取client(provider)的？
 6. 路由表数据如何缓存在server、client端的？
-
-#### 2.2.1 Client选举算法
-
-#### 2.2.2 Client与Server的心跳
-
-#### 2.2.3 负载均衡Server节点之间同步
-
-使用者是如何及时知道Client的状态？
-
-路由表会缓存到或者存储到那些机器上？client?server?
-
-server群集中的leader机制？
+7. 自我保护机制(self-preservation mode)是什么概念，为什么要这么设计？
+8. 增量更新(delta updates)是什么概念, 为什么要这么设计？
 
 
 
 #### 2.2. REST FULL接口
 https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
+<table>
+	<tbody><tr>
+		<td> <strong>Operation</strong> </td>
+		<td> <strong><span>HTTP</span> action</strong> </td>
+		<td> <strong>Description</strong> </td>
+	</tr>
+	<tr>
+		<td> Register new application instance </td>
+		<td> <span>POST</span> /eureka/v2/apps/<b>appID</b> </td>
+		<td> Input: <span>JSON</span>/<span>XML</span> payload <span>HTTP</span> Code: 204 on success </td>
+	</tr>
+	<tr>
+		<td> De-register application instance </td>
+		<td> <span>DELETE</span> /eureka/v2/apps/<b>appID</b>/<b>instanceID</b> </td>
+		<td> <span>HTTP</span> Code: 200 on success </td>
+	</tr>
+	<tr>
+		<td> Send application instance heartbeat </td>
+		<td> <span>PUT</span> /eureka/v2/apps/<b>appID</b>/<b>instanceID</b> </td>
+		<td> <span>HTTP</span> Code:<br>
+* 200 on success<br>
+* 404 if <b>instanceID</b> doesn’t exist </td>
+	</tr>
+	<tr>
+		<td> Query for all instances </td>
+		<td> <span>GET</span> /eureka/v2/apps </td>
+		<td> <span>HTTP</span> Code: 200 on success Output: <span>JSON</span>/<span>XML</span>
+</td>
+	</tr>
+	<tr>
+		<td> Query for all <b>appID</b> instances </td>
+		<td> <span>GET</span> /eureka/v2/apps/<b>appID</b> </td>
+		<td> <span>HTTP</span> Code: 200 on success Output: <span>JSON</span>/<span>XML</span> </td>
+	</tr>
+	<tr>
+		<td> Query for a specific <b>appID</b>/<b>instanceID</b> </td>
+		<td> <span>GET</span> /eureka/v2/apps/<b>appID</b>/<b>instanceID</b> </td>
+		<td> <span>HTTP</span> Code: 200 on success Output: <span>JSON</span>/<span>XML</span>
+</td>
+	</tr>
+	<tr>
+		<td> Query for a specific <b>instanceID</b> </td>
+		<td> <span>GET</span> /eureka/v2/instances/<b>instanceID</b> </td>
+		<td> <span>HTTP</span> Code: 200 on success Output: <span>JSON</span>/<span>XML</span>
+</td>
+	</tr>
+	<tr>
+		<td> Take instance out of service </td>
+		<td> <span>PUT</span> /eureka/v2/apps/<b>appID</b>/<b>instanceID</b>/status?value=OUT_OF_SERVICE</td>
+		<td> <span>HTTP</span> Code:<br>
+* 200 on success<br>
+* 500 on failure </td>
+	</tr>
+	<tr>
+		<td> Put instance back into service (remove override) </td>
+		<td> <span>DELETE</span> /eureka/v2/apps/<b>appID</b>/<b>instanceID</b>/status?value=UP  (The value=UP is optional, it is used as a suggestion for the fallback status due to removal of the override)</td>
+		<td> <span>HTTP</span> Code:<br>
+* 200 on success<br>
+* 500 on failure </td>
+	</tr>
+	<tr>
+		<td> Update metadata </td>
+		<td> <span>PUT</span> /eureka/v2/apps/<b>appID</b>/<b>instanceID</b>/metadata?key=value</td>
+		<td> <span>HTTP</span> Code:<br>
+* 200 on success<br>
+* 500 on failure </td>
+	</tr>
+	<tr>
+		<td> Query for all instances under a particular <b>vip address</b> </td>
+		<td> <span>GET</span> /eureka/v2/vips/<b>vipAddress</b> </td>
+		<td> <br>
+* <span>HTTP</span> Code: 200 on success Output: <span>JSON</span>/<span>XML</span> <br>
+* 404 if the <b>vipAddress</b> does not exist.</td>
+	</tr>
+	<tr>
+		<td> Query for all instances under a particular <b>secure vip address</b> </td>
+		<td> <span>GET</span> /eureka/v2/svips/<b>svipAddress</b> </td>
+		<td> <br>
+* <span>HTTP</span> Code: 200 on success Output: <span>JSON</span>/<span>XML</span> <br>
+* 404 if the <b>svipAddress</b> does not exist.</td>
+	</tr>
+</tbody>
+</table>
 
 ## 3.Spring Cloud Eureka
+
+https://segmentfault.com/a/1190000008378268
 
 ## 4.常用服务治理工具比较
 Eureka,Zookeeper,Consol
 http://www.tuicool.com/articles/zyy2qeZ
+
+## 5.最佳实践
+参数配置的最佳实践：
+https://github.com/spring-cloud/spring-cloud-netflix/issues/203
+
+多网卡环境下Eureka服务注册IP选择问题
+http://blog.csdn.net/neosmith/article/details/53126924
