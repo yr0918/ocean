@@ -32,8 +32,6 @@ http://blog.csdn.net/u011834741/article/details/54709209
 7. 自我保护机制(self-preservation mode)是什么概念，为什么要这么设计？
 8. 增量更新(delta updates)是什么概念, 为什么要这么设计？
 
-
-
 #### 2.2. REST FULL接口
 https://github.com/Netflix/eureka/wiki/Eureka-REST-operations
 <table>
@@ -128,6 +126,118 @@ https://segmentfault.com/a/1190000008378268
 Eureka,Zookeeper,Consol
 http://www.tuicool.com/articles/zyy2qeZ
 
+<table>
+    <thead>
+      <tr>
+        <th width="26%">Feature</th>
+        <th width="21%">Consul</th>
+        <th width="17%">zookeeper</th>
+        <th width="18%">etcd</th>
+        <th width="18%">euerka</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>服务健康检查</td>
+        <td>服务状态，内存，硬盘等</td>
+        <td>(弱)长连接，keepalive</td>
+        <td>连接心跳</td>
+        <td>可配支持</td>
+      </tr>
+      <tr>
+        <td>多数据中心</td>
+        <td>支持</td>
+        <td>—</td>
+        <td>—</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>kv存储服务</td>
+        <td>支持</td>
+        <td>支持</td>
+        <td>支持</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>一致性</td>
+        <td>raft</td>
+        <td>paxos</td>
+        <td>raft</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>cap</td>
+        <td>ca</td>
+        <td>cp</td>
+        <td>cp</td>
+        <td>ap</td>
+      </tr>
+      <tr>
+        <td>使用接口(多语言能力)</td>
+        <td>支持http和dns</td>
+        <td>客户端</td>
+        <td>http/grpc</td>
+        <td>http（sidecar）</td>
+      </tr>
+      <tr>
+        <td>watch支持</td>
+        <td>全量/支持long polling</td>
+        <td>支持</td>
+        <td>支持 long polling</td>
+        <td>支持 long polling/大部分增量</td>
+      </tr>
+      <tr>
+        <td>自身监控</td>
+        <td>metrics</td>
+        <td>—</td>
+        <td>metrics</td>
+        <td>metrics</td>
+      </tr>
+      <tr>
+        <td>安全</td>
+        <td>acl /https</td>
+        <td>acl</td>
+        <td>https支持（弱）</td>
+        <td>—</td>
+      </tr>
+      <tr>
+        <td>spring cloud集成</td>
+        <td>已支持</td>
+        <td>已支持</td>
+        <td>已支持</td>
+        <td>已支持</td>
+      </tr>
+    </tbody>
+  </table>
+
+1. `服务的健康检查`：
+Euraka 使用时需要显式配置健康检查支持；Zookeeper,Etcd 则在失去了和服务进程的连接情况下任务不健康，而 Consul 相对更为详细点，比如内存是否已使用了90%，文件系统的空间是不是快不足了。
+
+1. `多数据中心支持`：
+Consul 通过 WAN 的 Gossip 协议，完成跨数据中心的同步；而且其他的产品则需要额外的开发工作来实现；
+
+1. `KV 存储服务`：
+除了 Eureka ,其他几款都能够对外支持 k-v 的存储服务，所以后面会讲到这几款产品追求高一致性的重要原因。而提供存储服务，也能够较好的转化为动态配置服务哦。
+
+1. `产品设计中 CAP 理论的取舍`：
+Eureka 典型的 AP,作为分布式场景下的服务发现的产品较为合适，服务发现场景的可用性优先级较高，一致性并不是特别致命。其次 CA 类型的场景 Consul,也能提供较高的可用性，并能 k-v store 服务保证一致性。 而Zookeeper,Etcd则是CP类型 牺牲可用性，在服务发现场景并没太大优势；
+
+1. `多语言能力与对外提供服务的接入协议`：
+Zookeeper的跨语言支持较弱，其他几款支持 http11 提供接入的可能。Euraka 一般通过 sidecar的方式提供多语言客户端的接入支持。Etcd 还提供了Grpc的支持。 Consul除了标准的Rest服务api,还提供了DNS的支持。
+
+1. `Watch的支持（客户端观察到服务提供者变化）`：
+Zookeeper 支持服务器端推送变化，Eureka 2.0(正在开发中)也计划支持。 Eureka 1,Consul,Etcd则都通过长轮询的方式来实现变化的感知；
+
+1. `自身集群的监控`：
+除了 Zookeeper ,其他几款都默认支持 metrics，运维者可以搜集并报警这些度量信息达到监控目的；
+
+1. `安全`：
+Consul,Zookeeper 支持ACL，另外 Consul,Etcd 支持安全通道https.
+
+1. `Spring Cloud的集成`：
+目前都有相对应的 boot starter，提供了集成能力。
+
+总的来看，目前Consul 自身功能，和 spring cloud 对其集成的支持都相对较为完善，而且运维的复杂度较为简单（没有详细列出讨论），Eureka 设计上比较符合场景，但还需持续的完善
 ## 5.最佳实践
 参数配置的最佳实践：
 https://github.com/spring-cloud/spring-cloud-netflix/issues/203
