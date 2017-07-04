@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.netflix.hystrix.HystrixObservableCommand</OriginalElement>
+  <nodes>
+    <node x="190.0" y="81.0">com.netflix.hystrix.HystrixCircuitBreaker</node>
+    <node x="167.71428571428572" y="0.0">com.netflix.hystrix.HystrixCommandGroupKey</node>
+    <node x="648.0" y="81.0">com.netflix.hystrix.HystrixThreadPool</node>
+    <node x="860.5" y="303.0">com.netflix.hystrix.HystrixCommand</node>
+    <node x="694.75" y="0.0">com.netflix.hystrix.HystrixThreadPoolKey</node>
+    <node x="421.0" y="81.0">com.netflix.hystrix.HystrixCommandMetrics</node>
+    <node x="844.125" y="81.0">com.netflix.hystrix.HystrixObservable</node>
+    <node x="465.75" y="0.0">com.netflix.hystrix.HystrixCommandProperties</node>
+    <node x="0.0" y="81.0">com.netflix.hystrix.HystrixInvokableInfo</node>
+    <node x="527.25" y="212.0">com.netflix.hystrix.AbstractCommand</node>
+    <node x="458.75" y="303.0">com.netflix.hystrix.HystrixObservableCommand</node>
+    <node x="926.2767857142858" y="0.0">com.netflix.hystrix.HystrixInvokable</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="com.netflix.hystrix.AbstractCommand" target="com.netflix.hystrix.HystrixCircuitBreaker">
+      <point x="-29.625" y="-15.5" />
+      <point x="576.625" y="172.0" />
+      <point x="275.5" y="172.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.AbstractCommand" target="com.netflix.hystrix.HystrixThreadPool">
+      <point x="29.625" y="-15.5" />
+      <point x="635.875" y="172.0" />
+      <point x="726.0" y="172.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.AbstractCommand" target="com.netflix.hystrix.HystrixObservable">
+      <point x="69.125" y="-15.5" />
+      <point x="675.375" y="192.0" />
+      <point x="870.125" y="192.0" />
+      <point x="-52.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixObservableCommand" target="com.netflix.hystrix.HystrixInvokableInfo">
+      <point x="-72.0" y="-15.5" />
+      <point x="494.75" y="283.0" />
+      <point x="5.797619047619037" y="283.0" />
+      <point x="5.797619047619037" y="192.0" />
+      <point x="28.16666666666663" y="192.0" />
+      <point x="-56.33333333333337" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixCommand" target="com.netflix.hystrix.HystrixInvokable">
+      <point x="55.875" y="-15.5" />
+      <point x="990.875" y="283.0" />
+      <point x="1043.5267857142858" y="283.0" />
+      <point x="1043.5267857142858" y="61.0" />
+      <point x="1035.7767857142858" y="61.0" />
+      <point x="36.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixCommandMetrics" target="com.netflix.hystrix.HystrixCommandProperties">
+      <point x="0.0" y="-15.5" />
+      <point x="-52.25" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.AbstractCommand" target="com.netflix.hystrix.HystrixThreadPoolKey">
+      <point x="49.375" y="-15.5" />
+      <point x="655.625" y="182.0" />
+      <point x="827.5" y="182.0" />
+      <point x="44.25" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixCommandMetrics" target="com.netflix.hystrix.HystrixCommandMetrics">
+      <point x="24.0" y="15.5" />
+      <point x="541.0" y="152.0" />
+      <point x="381.0" y="152.0" />
+      <point x="381.0" y="86.16666666666666" />
+      <point x="-96.0" y="-10.333333333333343" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixCommand" target="com.netflix.hystrix.HystrixInvokableInfo">
+      <point x="-55.875" y="-15.5" />
+      <point x="879.125" y="273.0" />
+      <point x="61.83333333333337" y="273.0" />
+      <point x="61.83333333333337" y="192.0" />
+      <point x="84.5" y="192.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.AbstractCommand" target="com.netflix.hystrix.HystrixCommandMetrics">
+      <point x="-9.875" y="-15.5" />
+      <point x="596.375" y="192.0" />
+      <point x="589.0" y="192.0" />
+      <point x="72.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixCommand" target="com.netflix.hystrix.HystrixObservable">
+      <point x="18.625" y="-15.5" />
+      <point x="953.625" y="273.0" />
+      <point x="998.5704365079365" y="273.0" />
+      <point x="998.5704365079365" y="192.0" />
+      <point x="974.125" y="192.0" />
+      <point x="52.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.AbstractCommand" target="com.netflix.hystrix.HystrixInvokableInfo">
+      <point x="-69.125" y="-15.5" />
+      <point x="537.125" y="192.0" />
+      <point x="140.83333333333337" y="192.0" />
+      <point x="56.33333333333334" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.AbstractCommand" target="com.netflix.hystrix.HystrixCommandGroupKey">
+      <point x="-49.375" y="-15.5" />
+      <point x="556.875" y="182.0" />
+      <point x="179.5" y="182.0" />
+      <point x="179.5" y="61.0" />
+      <point x="219.46428571428572" y="61.0" />
+      <point x="-51.75" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixObservableCommand" target="com.netflix.hystrix.HystrixObservable">
+      <point x="72.0" y="-15.5" />
+      <point x="638.75" y="283.0" />
+      <point x="942.625" y="283.0" />
+      <point x="942.625" y="192.0" />
+      <point x="922.125" y="192.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixCommand" target="com.netflix.hystrix.AbstractCommand">
+      <point x="-18.625" y="-15.5" />
+      <point x="916.375" y="263.0" />
+      <point x="645.75" y="263.0" />
+      <point x="39.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.AbstractCommand" target="com.netflix.hystrix.HystrixCommandProperties">
+      <point x="9.875" y="-15.5" />
+      <point x="616.125" y="192.0" />
+      <point x="623.5" y="192.0" />
+      <point x="52.25" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixObservable" target="com.netflix.hystrix.HystrixInvokable">
+      <point x="0.0" y="-15.5" />
+      <point x="922.125" y="61.0" />
+      <point x="962.7767857142858" y="61.0" />
+      <point x="-36.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixObservableCommand" target="com.netflix.hystrix.AbstractCommand">
+      <point x="0.0" y="-15.5" />
+      <point x="-39.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixCommandMetrics" target="com.netflix.hystrix.HystrixCommandGroupKey">
+      <point x="-64.0" y="-15.5" />
+      <point x="453.0" y="61.0" />
+      <point x="322.9642857142857" y="61.0" />
+      <point x="51.75" y="15.5" />
+    </edge>
+    <edge source="com.netflix.hystrix.HystrixCommandMetrics" target="com.netflix.hystrix.HystrixThreadPoolKey">
+      <point x="64.0" y="-15.5" />
+      <point x="581.0" y="61.0" />
+      <point x="739.0" y="61.0" />
+      <point x="-44.25" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.958827634333566" x="706.5" y="147.0" />
+  <SelectedNodes>
+    <node>com.netflix.hystrix.HystrixCommand</node>
+  </SelectedNodes>
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

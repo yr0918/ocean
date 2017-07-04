@@ -15,7 +15,8 @@ for middle tier services, It provides the following features
 - ribbon-loadbalancer: Load balancer APIs that can be used independently or with other modules
 - ribbon-eureka: APIs using Eureka client to provide dynamic server list for cloud
 - ribbon-transport: Transport clients that support HTTP, TCP and UDP protocols using RxNetty with load balancing capability
-- ribbon-httpclient: REST client built on top of Apache HttpClient integrated with load balancers (deprecated and being replaced by ribbon module)
+- ribbon-httpclient: REST client built on top of Apache HttpClient integrated with load balancers
+                       (deprecated and being replaced by ribbon module)，已经被遗弃，集成到了ribbon中
 - ribbon-core: Client configuration APIs and other shared APIs
 
 ## Robbin

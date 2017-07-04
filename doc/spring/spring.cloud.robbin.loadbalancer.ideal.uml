@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>com.netflix.loadbalancer.AbstractLoadBalancer</OriginalElement>
+  <nodes>
+    <node x="1020.1812853107348" y="177.0">com.netflix.loadbalancer.AbstractLoadBalancerRule</node>
+    <node x="857.0" y="339.0">com.netflix.loadbalancer.WeightedResponseTimeRule</node>
+    <node x="2097.931285310735" y="531.0">com.netflix.loadbalancer.AbstractServerListFilter</node>
+    <node x="704.3687853107348" y="531.0">com.netflix.loadbalancer.DummyPing</node>
+    <node x="1462.431285310735" y="450.0">com.netflix.loadbalancer.NoOpPing</node>
+    <node x="1319.9147598870059" y="339.0">com.netflix.loadbalancer.RetryRule</node>
+    <node x="1139.431285310735" y="450.0">com.netflix.loadbalancer.BaseLoadBalancer</node>
+    <node x="1719.931285310735" y="339.0">com.netflix.loadbalancer.ServerListUpdater</node>
+    <node x="2190.181285310735" y="693.0">com.netflix.niws.loadbalancer.DefaultNIWSServerListFilter</node>
+    <node x="843.3687853107348" y="531.0">com.netflix.niws.loadbalancer.NIWSDiscoveryPing</node>
+    <node x="2087.931285310735" y="612.0">com.netflix.loadbalancer.ZoneAffinityServerListFilter</node>
+    <node x="265.0" y="258.0">com.netflix.loadbalancer.reactive.LoadBalancerCommand</node>
+    <node x="140.0562853107349" y="450.0">com.netflix.loadbalancer.NoOpLoadBalancer</node>
+    <node x="0.0" y="258.0">com.netflix.client.AbstractLoadBalancerAwareClient</node>
+    <node x="1649.8312853107348" y="531.0">com.netflix.loadbalancer.DynamicServerListLoadBalancer</node>
+    <node x="2436.9" y="531.0">com.netflix.loadbalancer.AbstractServerList</node>
+    <node x="510.0562853107348" y="450.0">com.netflix.loadbalancer.BestAvailableRule</node>
+    <node x="229.75" y="177.0">com.netflix.loadbalancer.LoadBalancerContext</node>
+    <node x="2550.931285310735" y="612.0">com.netflix.niws.loadbalancer.DiscoveryEnabledNIWSServerList</node>
+    <node x="2309.931285310735" y="612.0">com.netflix.loadbalancer.ConfigurationBasedServerList</node>
+    <node x="1214.0" y="339.0">com.netflix.loadbalancer.IPing</node>
+    <node x="413.0562853107348" y="531.0">com.netflix.loadbalancer.AvailabilityFilteringRule</node>
+    <node x="1331.181285310735" y="87.5">com.netflix.loadbalancer.IRule</node>
+    <node x="911.316525423729" y="258.0">com.netflix.loadbalancer.RoundRobinRule</node>
+    <node x="1136.931285310735" y="258.0">com.netflix.loadbalancer.RandomRule</node>
+    <node x="2088.431285310735" y="450.0">com.netflix.loadbalancer.ServerListFilter</node>
+    <node x="1593.431285310735" y="450.0">com.netflix.loadbalancer.PollingServerListUpdater</node>
+    <node x="229.0562853107349" y="531.0">com.netflix.loadbalancer.ZoneAvoidanceRule</node>
+    <node x="1807.431285310735" y="450.0">com.netflix.niws.loadbalancer.EurekaNotificationServerListUpdater</node>
+    <node x="464.28975988700574" y="87.5">com.netflix.loadbalancer.ILoadBalancer</node>
+    <node x="18.25" y="177.0">com.netflix.client.IClient</node>
+    <node x="1316.431285310735" y="450.0">com.netflix.loadbalancer.PingConstant</node>
+    <node x="376.0" y="339.0">com.netflix.loadbalancer.AbstractLoadBalancer</node>
+    <node x="573.0" y="339.0">com.netflix.loadbalancer.ClientConfigEnabledRoundRobinRule</node>
+    <node x="1098.7" y="612.0">com.netflix.loadbalancer.ZoneAwareLoadBalancer</node>
+    <node x="1997.181285310735" y="693.0">com.netflix.loadbalancer.ServerListSubsetFilter</node>
+    <node x="723.1187853107348" y="450.0">com.netflix.loadbalancer.AbstractLoadBalancerPing</node>
+    <node x="2434.4" y="450.0">com.netflix.loadbalancer.ServerList</node>
+    <node x="325.0562853107348" y="450.0">com.netflix.loadbalancer.PredicateBasedRule</node>
+  </nodes>
+  <notes>
+    <note x="1732.931285310735" y="259.0">
+      <node>com.netflix.loadbalancer.ServerListUpdater</node>
+      <value>候选机器定时刷新器</value>
+      <edge>
+        <point x="0.0" y="-15.5" />
+        <point x="0.0" y="14.5" />
+      </edge>
+    </note>
+    <note x="2097.431285310735" y="340.0">
+      <node>com.netflix.loadbalancer.ServerListFilter</node>
+      <value>筛选候选机器列表</value>
+      <edge>
+        <point x="0.0" y="-15.5" />
+        <point x="0.0" y="14.5" />
+      </edge>
+    </note>
+    <note x="1258.681285310735" y="0.0">
+      <node>com.netflix.loadbalancer.IRule</node>
+      <value>从候选机器列表中选择一天机器的算法</value>
+      <edge>
+        <point x="0.0" y="-15.5" />
+        <point x="0.0" y="14.5" />
+      </edge>
+    </note>
+    <note x="2429.4" y="340.0">
+      <node>com.netflix.loadbalancer.ServerList</node>
+      <value>获取候选机器列表</value>
+      <edge>
+        <point x="0.0" y="-15.5" />
+        <point x="0.0" y="14.5" />
+      </edge>
+    </note>
+    <note x="460.78975988700574" y="0.0">
+      <node>com.netflix.loadbalancer.ILoadBalancer</node>
+      <value>最上层的负载均衡接口</value>
+      <edge>
+        <point x="0.0" y="-15.5" />
+        <point x="0.0" y="14.5" />
+      </edge>
+    </note>
+    <note x="173.0" y="79.0">
+      <node>com.netflix.loadbalancer.LoadBalancerContext</node>
+      <value>集成了负载均衡，并且会记录每次\n请求的状态ServerStats</value>
+      <edge>
+        <point x="-43.25" y="-15.5" />
+        <point x="0.0" y="24.0" />
+      </edge>
+    </note>
+  </notes>
+  <edges>
+    <edge source="com.netflix.loadbalancer.ClientConfigEnabledRoundRobinRule" target="com.netflix.loadbalancer.RoundRobinRule">
+      <point x="88.0" y="-15.5" />
+      <point x="793.0" y="319.0" />
+      <point x="955.416525423729" y="319.0" />
+      <point x="-29.399999999999977" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.ConfigurationBasedServerList" target="com.netflix.loadbalancer.AbstractServerList">
+      <point x="0.0" y="-15.5" />
+      <point x="2420.431285310735" y="587.0" />
+      <point x="2475.4" y="587.0" />
+      <point x="-38.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.AbstractLoadBalancerRule" target="com.netflix.loadbalancer.IRule">
+      <point x="50.5" y="-15.5" />
+      <point x="1171.681285310735" y="157.0" />
+      <point x="1344.3479519774014" y="157.0" />
+      <point x="-26.333333333333258" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.WeightedResponseTimeRule" target="com.netflix.loadbalancer.RoundRobinRule">
+      <point x="0.0" y="-15.5" />
+      <point x="965.0" y="319.0" />
+      <point x="984.816525423729" y="319.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.BaseLoadBalancer" target="com.netflix.loadbalancer.RoundRobinRule">
+      <point x="-19.625" y="-15.5" />
+      <point x="1198.306285310735" y="390.0" />
+      <point x="1083.5" y="390.0" />
+      <point x="1083.5" y="319.0" />
+      <point x="1014.216525423729" y="319.0" />
+      <point x="29.399999999999977" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.RetryRule" target="com.netflix.loadbalancer.IRule">
+      <point x="35.0" y="-15.5" />
+      <point x="1407.4147598870059" y="319.0" />
+      <point x="1383.4147598870059" y="319.0" />
+      <point x="1383.4147598870059" y="157.0" />
+      <point x="1370.681285310735" y="157.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.NoOpLoadBalancer" target="com.netflix.loadbalancer.AbstractLoadBalancer">
+      <point x="0.0" y="-15.5" />
+      <point x="222.5562853107349" y="410.0" />
+      <point x="405.5" y="410.0" />
+      <point x="-59.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.client.AbstractLoadBalancerAwareClient" target="com.netflix.loadbalancer.LoadBalancerContext">
+      <point x="61.25" y="-15.5" />
+      <point x="183.75" y="238.0" />
+      <point x="273.0" y="238.0" />
+      <point x="-43.25" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.RetryRule" target="com.netflix.loadbalancer.AbstractLoadBalancerRule">
+      <point x="0.0" y="-15.5" />
+      <point x="1372.4147598870059" y="228.0" />
+      <point x="1196.931285310735" y="228.0" />
+      <point x="75.75" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.AvailabilityFilteringRule" target="com.netflix.loadbalancer.PredicateBasedRule">
+      <point x="0.0" y="-15.5" />
+      <point x="504.0562853107348" y="511.0" />
+      <point x="448.8062853107348" y="511.0" />
+      <point x="41.25" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.ServerListSubsetFilter" target="com.netflix.loadbalancer.ZoneAffinityServerListFilter">
+      <point x="0.0" y="-15.5" />
+      <point x="2083.681285310735" y="668.0" />
+      <point x="2138.431285310735" y="668.0" />
+      <point x="-50.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.ZoneAffinityServerListFilter" target="com.netflix.loadbalancer.AbstractServerListFilter">
+      <point x="0.0" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.client.AbstractLoadBalancerAwareClient" target="com.netflix.client.IClient">
+      <point x="-61.25" y="-15.5" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.reactive.LoadBalancerCommand" target="com.netflix.loadbalancer.LoadBalancerContext">
+      <point x="0.0" y="-15.5" />
+      <point x="43.25" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.AbstractLoadBalancerRule" target="com.netflix.loadbalancer.ILoadBalancer">
+      <point x="-50.5" y="-15.5" />
+      <point x="1070.681285310735" y="157.0" />
+      <point x="575.1230932203391" y="157.0" />
+      <point x="44.33333333333337" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.RoundRobinRule" target="com.netflix.loadbalancer.AbstractLoadBalancerRule">
+      <point x="0.0" y="-15.5" />
+      <point x="984.816525423729" y="238.0" />
+      <point x="1095.931285310735" y="238.0" />
+      <point x="-25.25" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.ZoneAvoidanceRule" target="com.netflix.loadbalancer.PredicateBasedRule">
+      <point x="0.0" y="-15.5" />
+      <point x="311.0562853107349" y="511.0" />
+      <point x="366.3062853107348" y="511.0" />
+      <point x="-41.25" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.BaseLoadBalancer" target="com.netflix.loadbalancer.IPing">
+      <point x="19.625" y="-15.5" />
+      <point x="1237.556285310735" y="430.0" />
+      <point x="1243.625" y="430.0" />
+      <point x="-9.875" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.RandomRule" target="com.netflix.loadbalancer.AbstractLoadBalancerRule">
+      <point x="0.0" y="-15.5" />
+      <point x="1198.931285310735" y="238.0" />
+      <point x="1146.431285310735" y="238.0" />
+      <point x="25.25" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.DynamicServerListLoadBalancer" target="com.netflix.loadbalancer.ServerList">
+      <point x="93.59999999999991" y="-15.5" />
+      <point x="1860.4312853107347" y="511.0" />
+      <point x="2460.9" y="511.0" />
+      <point x="-26.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.DynamicServerListLoadBalancer" target="com.netflix.loadbalancer.ServerListFilter">
+      <point x="46.799999999999955" y="-15.5" />
+      <point x="1813.6312853107347" y="501.0" />
+      <point x="2121.931285310735" y="501.0" />
+      <point x="-33.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.AbstractLoadBalancerPing" target="com.netflix.loadbalancer.AbstractLoadBalancer">
+      <point x="-50.5" y="-15.5" />
+      <point x="773.6187853107348" y="410.0" />
+      <point x="464.5" y="410.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.LoadBalancerContext" target="com.netflix.loadbalancer.ILoadBalancer">
+      <point x="43.25" y="-15.5" />
+      <point x="359.5" y="147.0" />
+      <point x="486.4564265536724" y="147.0" />
+      <point x="-44.333333333333314" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.DummyPing" target="com.netflix.loadbalancer.AbstractLoadBalancerPing">
+      <point x="0.0" y="-15.5" />
+      <point x="763.8687853107348" y="511.0" />
+      <point x="773.6187853107348" y="511.0" />
+      <point x="-50.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.AbstractServerListFilter" target="com.netflix.loadbalancer.ServerListFilter">
+      <point x="0.0" y="-15.5" />
+      <point x="33.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.ClientConfigEnabledRoundRobinRule" target="com.netflix.loadbalancer.AbstractLoadBalancerRule">
+      <point x="-88.0" y="-15.5" />
+      <point x="617.0" y="319.0" />
+      <point x="658.5562853107348" y="319.0" />
+      <point x="658.5562853107348" y="228.0" />
+      <point x="1045.431285310735" y="228.0" />
+      <point x="-75.75" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.RetryRule" target="com.netflix.loadbalancer.RoundRobinRule">
+      <point x="-35.0" y="-15.5" />
+      <point x="1337.4147598870059" y="309.0" />
+      <point x="1043.616525423729" y="309.0" />
+      <point x="58.799999999999955" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.BestAvailableRule" target="com.netflix.loadbalancer.ClientConfigEnabledRoundRobinRule">
+      <point x="0.0" y="-15.5" />
+      <point x="586.0562853107348" y="430.0" />
+      <point x="771.0" y="430.0" />
+      <point x="66.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.BaseLoadBalancer" target="com.netflix.loadbalancer.IRule">
+      <point x="58.875" y="-15.5" />
+      <point x="1276.806285310735" y="430.0" />
+      <point x="1435.4147598870059" y="430.0" />
+      <point x="1435.4147598870059" y="157.0" />
+      <point x="1397.014618644068" y="157.0" />
+      <point x="26.333333333333258" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.PingConstant" target="com.netflix.loadbalancer.IPing">
+      <point x="0.0" y="-15.5" />
+      <point x="1379.431285310735" y="420.0" />
+      <point x="1263.375" y="420.0" />
+      <point x="9.875" y="15.5" />
+    </edge>
+    <edge source="com.netflix.niws.loadbalancer.DiscoveryEnabledNIWSServerList" target="com.netflix.loadbalancer.AbstractServerList">
+      <point x="0.0" y="-15.5" />
+      <point x="2671.931285310735" y="587.0" />
+      <point x="2552.4" y="587.0" />
+      <point x="38.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.niws.loadbalancer.NIWSDiscoveryPing" target="com.netflix.loadbalancer.AbstractLoadBalancerPing">
+      <point x="-41.0" y="-15.5" />
+      <point x="884.3687853107348" y="511.0" />
+      <point x="874.6187853107348" y="511.0" />
+      <point x="50.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.niws.loadbalancer.DefaultNIWSServerListFilter" target="com.netflix.loadbalancer.ZoneAffinityServerListFilter">
+      <point x="0.0" y="-15.5" />
+      <point x="2294.181285310735" y="668.0" />
+      <point x="2239.431285310735" y="668.0" />
+      <point x="50.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.NoOpPing" target="com.netflix.loadbalancer.IPing">
+      <point x="0.0" y="-15.5" />
+      <point x="1517.931285310735" y="410.0" />
+      <point x="1283.125" y="410.0" />
+      <point x="29.625" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.PredicateBasedRule" target="com.netflix.loadbalancer.ClientConfigEnabledRoundRobinRule">
+      <point x="0.0" y="-15.5" />
+      <point x="407.5562853107348" y="420.0" />
+      <point x="639.0" y="420.0" />
+      <point x="-66.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.niws.loadbalancer.NIWSDiscoveryPing" target="com.netflix.loadbalancer.BaseLoadBalancer">
+      <point x="41.0" y="-15.5" />
+      <point x="966.3687853107348" y="501.0" />
+      <point x="1155.1312853107347" y="501.0" />
+      <point x="-62.799999999999955" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.ZoneAwareLoadBalancer" target="com.netflix.loadbalancer.DynamicServerListLoadBalancer">
+      <point x="77.59999999999991" y="-15.5" />
+      <point x="1273.3" y="587.0" />
+      <point x="1766.8312853107348" y="587.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.AbstractServerList" target="com.netflix.loadbalancer.ServerList">
+      <point x="0.0" y="-15.5" />
+      <point x="26.5" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.AbstractLoadBalancer" target="com.netflix.loadbalancer.ILoadBalancer">
+      <point x="0.0" y="-15.5" />
+      <point x="464.5" y="157.0" />
+      <point x="530.7897598870057" y="157.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.niws.loadbalancer.EurekaNotificationServerListUpdater" target="com.netflix.loadbalancer.ServerListUpdater">
+      <point x="0.0" y="-15.5" />
+      <point x="1937.931285310735" y="430.0" />
+      <point x="1848.264618644068" y="430.0" />
+      <point x="51.33333333333326" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.AbstractLoadBalancerPing" target="com.netflix.loadbalancer.IPing">
+      <point x="50.5" y="-15.5" />
+      <point x="874.6187853107348" y="430.0" />
+      <point x="1223.875" y="430.0" />
+      <point x="-29.625" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.ZoneAwareLoadBalancer" target="com.netflix.loadbalancer.BaseLoadBalancer">
+      <point x="0.0" y="-15.5" />
+      <point x="1195.7" y="587.0" />
+      <point x="1217.931285310735" y="587.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.DynamicServerListLoadBalancer" target="com.netflix.loadbalancer.BaseLoadBalancer">
+      <point x="-93.60000000000014" y="-15.5" />
+      <point x="1673.2312853107346" y="511.0" />
+      <point x="1280.7312853107346" y="511.0" />
+      <point x="62.799999999999955" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.PollingServerListUpdater" target="com.netflix.loadbalancer.ServerListUpdater">
+      <point x="0.0" y="-15.5" />
+      <point x="1689.931285310735" y="430.0" />
+      <point x="1745.5979519774014" y="430.0" />
+      <point x="-51.33333333333326" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.DynamicServerListLoadBalancer" target="com.netflix.loadbalancer.PollingServerListUpdater">
+      <point x="-46.799999999999955" y="-15.5" />
+      <point x="1720.0312853107348" y="511.0" />
+      <point x="1689.931285310735" y="511.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.DynamicServerListLoadBalancer" target="com.netflix.loadbalancer.ServerListUpdater">
+      <point x="0.0" y="-15.5" />
+      <point x="1766.8312853107348" y="511.0" />
+      <point x="1796.931285310735" y="511.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.ZoneAwareLoadBalancer" target="com.netflix.loadbalancer.AvailabilityFilteringRule">
+      <point x="-77.59999999999991" y="-15.5" />
+      <point x="1118.1000000000001" y="587.0" />
+      <point x="504.0562853107348" y="587.0" />
+      <point x="0.0" y="15.5" />
+    </edge>
+    <edge source="com.netflix.loadbalancer.BaseLoadBalancer" target="com.netflix.loadbalancer.AbstractLoadBalancer">
+      <point x="-58.875" y="-15.5" />
+      <point x="1159.056285310735" y="400.0" />
+      <point x="523.5" y="400.0" />
+      <point x="59.0" y="15.5" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="1.0323518016272761" x="1436.4708200412838" y="376.1799587164572" />
+  <SelectedNodes />
+  <Categories />
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+
