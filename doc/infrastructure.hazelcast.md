@@ -1,5 +1,11 @@
 # 分布式内存组件
 
+分布式缓存hazelcast的一些原理分析
+http://wanghongji.iteye.com/blog/2047740
+
+Hazelcast集群原理分析
+http://blog.csdn.net/wangyangzhizhou/article/details/52677826
+
 ##### Hazelcast运行结构
 
 ![](https://github.com/yr0918/ocean/raw/master/doc/img/hazelcast.runtime.jpg)
