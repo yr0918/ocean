@@ -31,15 +31,62 @@ select * from user order by create_time desc limit 2,10
 ### 熟悉MySQL数据库应用以及常用性能诊断和优化技术
 
 # 算法
-### q1.内存限制 5m, 文件有 50m, 存的都是整数, 让我求出前 10 个最大的数
+### q1.m1.内存限制 5m, 文件有 50m, 存的都是整数, 让我求出前 10 个最大的数
+我的第一反应是堆排序, 一般这种题用堆排序都能解决. 我说了自己的思路. 面试官说是对的, 还有其他办法吗, 我想了好久,
+没想到其他办法,一度想起用hashmap,但是一些细节没想好, 大家有啥其他办法吗, 可以说说
 ### q1.快速排序
 ### q1.一瓶啤酒 2 元钱,2 个空瓶能换 1 瓶,4 个瓶盖能换一瓶, 现在有 100 元, 我能买到多少瓶啤酒
+递归的思路：
+```
+public static int totalBill(int billCount) {
+    if (billCount <= 0) {
+        return 0;
+    }
+    return billCount + totalBill(billCount / 2 + billCount / 4);
+}
+```
 ### q2.剑指offer那个之字形打印矩阵的题
 ### q2.2.一上来就是个top K的问题，然后问如何维护一个堆？接着是一个KMP的问题
+TOP K算法(和q1.m1一样)： http://blog.csdn.net/zhanzhan0329/article/details/18902153
+KMP算法：http://blog.csdn.net/yutianzuijin/article/details/11954939/
 ### q3.1.基本的算法主要问了二分搜索，快排，二叉树的一道算法题
 ### q5.“aabbdddaef”,压缩之后的字符串为“a2b2d3a1e1f1”。不可以用高级的数据结构容器
 ### 两个队列实现栈
 ### g1.实现X的N次方怎么样更加效率，由于第一次考虑的不多 ，没有想到N是负的情况，另外对于优化也是没有回答好
+```
+public double myPow(double x, int n) {
+    if (x == 0 && n == 0) {
+        throw new IllegalArgumentException();
+    }
+    // 指数正负标记
+    boolean isNegative = false;
+    // 求n的绝对值
+    if (n < 0) {
+        n = -n;
+        isNegative = true;
+    }
+    double result = pow(x, n);
+    if (isNegative) {
+        return 1.0 / result;
+    } else {
+        return result;
+    }
+}
+
+public double pow(double x, int n) {
+    if (n == 0) {
+        return 1;
+    } else {
+        double result = pow(x, n / 2);
+        // n是奇数
+        if (n % 2 != 0) {
+            return x * result * result;
+        } else {
+            return result * result;
+        }
+    }
+}
+```
 ### g1.设计树的结构体，实现前序遍历，使用的递归方式写的，然后问非递归怎么写，因为记得不清楚就说使用栈进行 记录的
 
 # JAVA基础

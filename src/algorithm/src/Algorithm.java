@@ -1,5 +1,3 @@
-import java.lang.ref.PhantomReference;
-
 public class Algorithm {
     /**
      * 归并排序：复杂度n*log2n，空间o(1)
@@ -221,5 +219,51 @@ public class Algorithm {
             }
         }
         data[parent] = parentValue;
+    }
+
+    // 二分查找普通循环实现
+    public static int binSearch(int srcArray[], int key) {
+        int mid = srcArray.length / 2;
+        if (key == srcArray[mid]) {
+            return mid;
+        }
+
+        int start = 0;
+        int end = srcArray.length - 1;
+        while (start <= end) {
+            mid = (end - start) / 2 + start;
+            if (key < srcArray[mid]) {
+                end = mid - 1;
+            } else if (key > srcArray[mid]) {
+                start = mid + 1;
+            } else {
+                return mid;
+            }
+        }
+        return -1;
+    }
+
+    // 二分查找递归实现
+    public static int binSearch(int srcArray[], int start, int end, int key) {
+        int mid = (end - start) / 2 + start;
+        if (srcArray[mid] == key) {
+            return mid;
+        }
+        if (start >= end) {
+            return -1;
+        } else if (key > srcArray[mid]) {
+            return binSearch(srcArray, mid + 1, end, key);
+        } else if (key < srcArray[mid]) {
+            return binSearch(srcArray, start, mid - 1, key);
+        }
+        return -1;
+    }
+
+    //一瓶啤酒 2 元钱,2 个空瓶能换 1 瓶,4 个瓶盖能换一瓶, 现在有 100 元, 我能买到多少瓶啤酒
+    public static int totalBill(int billCount) {
+        if (billCount <= 0) {
+            return 0;
+        }
+        return billCount + totalBill(billCount / 2 + billCount / 4);
     }
 }
