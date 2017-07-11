@@ -1,3 +1,5 @@
+Github: https://github.com/Netflix/ribbon
+
 Spring Cloud源码分析（二）Ribbon
 http://blog.didispace.com/springcloud-sourcecode-ribbon/
 
@@ -10,7 +12,7 @@ for middle tier services, It provides the following features
 - Multiple protocol (HTTP, TCP, UDP) support in an asynchronous and reactive model
 - Caching and batching
 
-## Modules
+# Modules
 - ribbon: APIs that integrate load balancing, fault tolerance, caching/batching on top of other ribbon modules and Hystrix
 - ribbon-loadbalancer: Load balancer APIs that can be used independently or with other modules
 - ribbon-eureka: APIs using Eureka client to provide dynamic server list for cloud
@@ -19,10 +21,10 @@ for middle tier services, It provides the following features
                        (deprecated and being replaced by ribbon module)，已经被遗弃，集成到了ribbon中
 - ribbon-core: Client configuration APIs and other shared APIs
 
-## Robbin
+# 2.核心实现
 
-1. 负载均衡的算法有哪些？各个算法的使用场景是什么？
-2. 怎么与Eureka无缝结合的？
+## 负载规则(Multiple and pluggable load balancing rules)？
+## 怎么与Eureka无缝结合的(Integration with service discovery)？
 
 ## Spring Cloud Robbin
 

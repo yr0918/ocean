@@ -1,10 +1,14 @@
-# HashSet and HashMap
+# HashSet and HashMap(JDK8)
+
+Java 8系列之重新认识HashMap
+https://tech.meituan.com/java-hashmap.html
 
 # 总体介绍
 之所以把*HashSet*和*HashMap*放在一起讲解，是因为二者在Java里有着相同的实现，前者仅仅是对后者做了一层包装，也就是说***HashSet*里面有一个*HashMap*（适配器模式）**。因此本文将重点分析*HashMap*。
 
 *HashMap*实现了*Map*接口，即允许放入`key`为`null`的元素，也允许插入`value`为`null`的元素；除该类未实现同步外，其余跟`Hashtable`大致相同；跟*TreeMap*不同，该容器不保证元素顺序，根据需要该容器可能会对元素重新哈希，元素的顺序也会被重新打散，因此不同时间迭代同一个*HashMap*的顺序可能会不同。
 根据对冲突的处理方式不同，哈希表有两种实现方式，一种开放地址方式（Open addressing），另一种是冲突链表方式（Separate chaining with linked lists）。**Java *HashMap*采用的是冲突链表方式**。
+
 ![HashMap_base](png/HashMap_base.png)
 
 从上图容易看出，如果选择合适的哈希函数，`put()`和`get()`方法可以在常数时间内完成。但在对*HashMap*进行迭代时，需要遍历整个table以及后面跟的冲突链表。因此对于迭代比较频繁的场景，不宜将*HashMap*的初始大小设的过大。
@@ -71,19 +75,51 @@ final Entry<K,V> getEntry(Object key) {
 ## put()
 
 `put(K key, V value)`方法是将指定的`key, value`对添加到`map`里。该方法首先会对`map`做一次查找，看是否包含该元组，如果已经包含则直接返回，查找过程类似于`getEntry()`方法；如果没有找到，则会通过`addEntry(int hash, K key, V value, int bucketIndex)`方法插入新的`entry`，插入方式为**尾部插入**。
-![HashMap_addEntry](png/HashMap_addEntry.png)
 ```Java
-//addEntry()
-void addEntry(int hash, K key, V value, int bucketIndex) {
-    if ((size >= threshold) && (null != table[bucketIndex])) {
-        resize(2 * table.length);//自动扩容，并重新哈希
-        hash = (null != key) ? hash(key) : 0;
-        bucketIndex = hash & (table.length-1);//hash%table.length
+ public V put(K key, V value) {
+    return putVal(hash(key), key, value, false, true);
+}
+final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
+                   boolean evict) {
+    Node<K,V>[] tab; Node<K,V> p; int n, i;
+    if ((tab = table) == null || (n = tab.length) == 0)
+        n = (tab = resize()).length;
+    if ((p = tab[i = (n - 1) & hash]) == null)
+        tab[i] = newNode(hash, key, value, null);
+    else {
+        Node<K,V> e; K k;
+        if (p.hash == hash &&
+            ((k = p.key) == key || (key != null && key.equals(k))))
+            e = p;
+        else if (p instanceof TreeNode)
+            e = ((TreeNode<K,V>)p).putTreeVal(this, tab, hash, key, value);
+        else {
+            for (int binCount = 0; ; ++binCount) {
+                if ((e = p.next) == null) {
+                    p.next = newNode(hash, key, value, null);
+                    if (binCount >= TREEIFY_THRESHOLD - 1) // -1 for 1st
+                        treeifyBin(tab, hash);
+                    break;
+                }
+                if (e.hash == hash &&
+                    ((k = e.key) == key || (key != null && key.equals(k))))
+                    break;
+                p = e;
+            }
+        }
+        if (e != null) { // existing mapping for key
+            V oldValue = e.value;
+            if (!onlyIfAbsent || oldValue == null)
+                e.value = value;
+            afterNodeAccess(e);
+            return oldValue;
+        }
     }
-    //在冲突链表头部插入新的entry
-    Entry<K,V> e = table[bucketIndex];
-    table[bucketIndex] = new Entry<>(hash, key, value, e);
-    size++;
+    ++modCount;
+    if (++size > threshold)
+        resize();
+    afterNodeInsertion(evict);
+    return null;
 }
 ```
 
@@ -154,6 +190,17 @@ final Entry<K,V> removeEntryForKey(Object key) {
 ```
 
 ## 扩容过程
+`先插入再检查是否需要扩容` 下面我们讲解下JDK1.8做了哪些优化。经过观测可以发现，我们使用的是2次幂的扩展(指长度扩为原来2倍)，所以，元素的位置要么是在原位置，
+要么是在原位置再移动2次幂的位置。看下图可以明白这句话的意思，n为table的长度，图（a）表示扩容前的key1和key2两种key确定索引位置的
+示例，图（b）表示扩容后key1和key2两种key确定索引位置的示例，其中hash1是key1对应的哈希与高位运算结果
+
+![](png/HashMap_resize_hash.png)
+
+元素在重新计算hash之后，因为n变为2倍，那么n-1的mask范围在高位多1bit(红色)，因此新的index就会发生这样的变化：
+因此，我们在扩充HashMap的时候，不需要像JDK1.7的实现那样重新计算hash，只需要看看原来的hash值新增的那个bit是1还是0就好了，是0的话索引没变，是1的话索引变成“原索引+oldCap”
+
+![](png/HashMap_resize_hash_d.png)
+
 
 ```java
 final Node<K,V>[] resize() {
@@ -227,6 +274,17 @@ final Node<K,V>[] resize() {
     }
     return newTab;
 }
+```
+
+## 为啥不安全
+1. 死循环：JDK8没有这个问题，JDK7由于resize的时候针对链表的转移是倒序，每次都会将顺序倒转，所以在多线程的情况下可能会出现在循环链，导致死循环
+
+2. fail-fast：如果在使用迭代器的过程中有其他线程修改了map，那么将抛出ConcurrentModificationException，这就是所谓fail-fast策略
+
+3. 造成数据丢失：两个线程同时resize的时候:
+```
+两个线程A,B都执行了(系统将以最后的为准B)： table = newTab;
+两个线程在转移链表的时候会变量oldTab（都指向原table），然后A做oldTab[j]=null的操作后，B再去检查的时候就丢失了这个数据
 ```
 
 # HashSet

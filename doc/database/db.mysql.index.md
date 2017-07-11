@@ -34,11 +34,11 @@
 ##### MyISAM存储引擎索引实现 `“非聚集”索引`
 主索引的B+数图
 
-![主索引的B+数图](https://github.com/yr0918/ocean/raw/master/doc/img/mysql_myisam_btree_primary_key.png)
+![主索引的B+数图](../img/mysql_myisam_btree_primary_key.png)
 
 辅助引的B+数图
 
-![辅助引的B+数图](https://github.com/yr0918/ocean/raw/master/doc/img/mysql_myisam_btree_sencond_key.png)
+![辅助引的B+数图](../img/mysql_myisam_btree_sencond_key.png)
 
 1. 索引文件和数据文件分离
 2. MyISAM引擎使用B+Tree作为索引结构，叶节点的data域存放的是数据记录的地址
@@ -47,11 +47,11 @@
 ##### InnoDB存储引擎索引实现 `“聚集”索引（叶节点包含了完整的数据记录）`
 主索引的B+数图
 
-![主索引的B+数图](https://github.com/yr0918/ocean/raw/master/doc/img/mysql_innodb_btree_primary_key.png)
+![主索引的B+数图](../img/mysql_innodb_btree_primary_key.png)
 
 辅助引的B+数图
 
-![辅助引的B+数图](https://github.com/yr0918/ocean/raw/master/doc/img/mysql_innodb_btree_sencond_key.png)
+![辅助引的B+数图](../img/mysql_innodb_btree_sencond_key.png)
 
 1. 不分离，表数据文件本身就是按B+Tree组织的一个索引结构
 2. 主索引的叶节点data域保存了完整的数据记录；辅助索引data域存储相应记录主键的值而不是地址
@@ -62,6 +62,41 @@
    会造成在插入新记录时数据文件为了维持B+Tree的特性而频繁的分裂调整，十分低效，而使用自增字段作为主
    键则是一个很好的选择
 
-##### MyISAM与InnoDB区别
+## 行锁与表锁
+http://blog.csdn.net/mysteryhaohao/article/details/51669741
+
+##### MyISAM存储引擎采用的表级锁
+MyISAM在执行查询语句（SELECT）前，会自动给涉及的所有表加读锁，在执行更新操作（UPDATE、DELETE、INSERT等）前，会自动给涉及的表加写锁
+
+1. myISAM表的读操作，不会阻塞其他用户对同一个表的读请求，但会阻塞对同一个表的写请求。
+2. myISAM表的写操作，会阻塞其他用户对同一个表的读和写操作。
+3. myISAM表的读、写操作之间、以及写操作之间是串行的
+
+MyISAM存储引擎的读锁和写锁是互斥的，读写操作室串行的，那么如果读写两个进程同时请求同一张表，Mysql将会使写进程先获得锁。
+不仅仅如此，即使读请求先到达锁等待队列，写锁后到达，写锁也会先执行。因为mysql因为写请求比读请求更加重要。这也正是MyISAM
+不适合含有大量更新操作和查询操作应用的原因
+
+##### InnoDB存储引擎既支持行级锁，也支持表级锁，默认情况下采用行级锁
+
+行级锁：
+
+InnoDB行锁是通过给索引上的索引项加锁来实现的，这一点MySQL与Oracle不同，后者是通过再数据块中，对相应数据行加锁来实现的。
+InnoDB这种行锁实现特点意味着：只有通过索引条件检索数据，innoDB才使用行级锁，否则InnoDB将使用表锁，在实际开发中应当注意
+
+对于InnoDB表，在绝大部分情况下都应该使用行级锁，因为事务和行锁往往是我们之所以选择InnoDB表的理由。但在个别特殊事务中，也可以考虑使用表级锁。
+- 第一种情况是：事务需要更新大部分或全部数据，表又比较大，如果使用默认的行锁，不仅这个事务执行效率低，而且可能造成其他事务长时间锁等待和锁冲突，这种情况下可以考虑使用表锁来提高该事务的执行速度。
+- 第二种情况是：事务涉及多个表，比较复杂，很可能引起死锁，造成大量事务回滚。这种情况也可以考虑一次性锁定事务涉及的表，从而避免死锁、减少数据库因事务回滚带来的开销。
+
+##### 关于死锁
+MyISAM表锁是deadlock free的，这是因为MyISAM总是一次获得所需的全部锁，要么全部满足，要么等待，因此不会出现死锁。但在InnoDB中，
+除单个SQL组成的事务外，锁是逐步获得的，这就决定了在InnoDB中发生死锁是可能的
+
+发生死锁后，InnoDB一般都能自动检测到，并使一个事务释放锁并回退，另一个事务获得锁，继续完成事务。但在涉及外部锁，或涉及表锁的情况下，
+InnoDB并不能完全自动检测到死锁，这需要通过设置锁等待超时参数 innodb_lock_wait_timeout来解决。需要说明的是，这个参数并不是只用来解决
+死锁问题，在并发访问比较高的情况下，如果大量事务因无法立即获得所需的锁而挂起，会占用大量计算机资源，造成严重性能问题，甚至拖跨数据库。
+我们通过设置合适的锁等待超时阈值，可以避免这种情况发生
+
+## MyISAM与InnoDB区别
+两种类型最主要的差别就是Innodb 支持事务处理与外键和行级锁。而MyISAM不支持
 
 MyISAM类型不支持事务处理等高级处理，而InnoDB类型支持。MyISAM类型的表强调的是性能，其执行数度比InnoDB类型更快，但是不提供事务支持，而InnoDB提供事务支持以及外部键等高级数据库功能

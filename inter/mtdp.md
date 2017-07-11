@@ -10,18 +10,25 @@ q5.美团-大众点评面经：http://blog.csdn.net/vip_wangsai/article/details/
 
 # 数据库
 ### q1.innodb 和 myisam的区别
+[解答](../doc/database/db.mysql.index.md)
 ### q1.一张用户表, 找出每个城市有多少人
+select count(id) as num from user group by city_id
 ### q1.删除user表中的重复数据, 只保留一条
+delete from user where user_name in (select user_name from user group by user_name having count(user_name)>1) and id not exist(select min(id) from user group by user_name having count(user_name)>1)
 ### q1.数据库优化方面的一些心得
+[解答](../doc/database/db.mysql.md)
 ### q1.当多表关联查询很慢的时候, 有什么办法加速查询..?
+这个我想到的办法就是加合理的索引这样子, 面试官说这样数据量上千万的时候还是慢, 他说了一种思路, 进行多次单表查询, 再程序中合并结果. 这种思路我也听过, 但是没说上来, 不知道实际用这种方法情况如何
 ### q1.排序取前 n 个
+select * from user order by create_time desc limit 2,10
 ### q1.数据库索引相关的提问, 索引原理, 如何设置索引, 怎么看待索引,sql 优化方面的事情
+[解答](../doc/database/db.mysql.index.md)
 ### q2.关于数据库的，基本的ACID，以及联合查找
 ### q3.1.项目中数据库优化的使用以及原理
 ### q3.1.数据库索引相关知识（索引原理，涉及B+Tree ，什么时候使用索引），内连接与外连接
 ### q3.2.数据语句的书写，主要是联合查询
 ### q4.MySQL 索引 一定要理解为什么使用索引会使查询搜索更快的原理
-
+### 熟悉MySQL数据库应用以及常用性能诊断和优化技术
 
 # 算法
 ### q1.内存限制 5m, 文件有 50m, 存的都是整数, 让我求出前 10 个最大的数
@@ -36,21 +43,28 @@ q5.美团-大众点评面经：http://blog.csdn.net/vip_wangsai/article/details/
 ### g1.设计树的结构体，实现前序遍历，使用的递归方式写的，然后问非递归怎么写，因为记得不清楚就说使用栈进行 记录的
 
 # JAVA基础
-### q1.hashmap原理
-### q1.hashmap 是线程不安全的, 那你觉得为啥不安全, 能详细说下吗？
-http://www.importnew.com/22011.html
-### q1.StringBuilder,StringBuffer的区别
-### q1.ArrayList 的扩容过程
-### q2.包括知道哪些集合类？ArrayList和LinkedList有什么区别？
+### q1.hashmap原理， 那你觉得为啥不安全, 能详细说下吗？
 ### q2.HashMap的实现原理（这个问的很多，请重点看，包括各种细节，为何按位与而不是取摸等问题）？HashMap是不是线程安全的？怎么做能使HashMap线程安全（其实考到了并发包的东西）？
-### q2.问了JVM的GC的内容。包括怎么分代，新生代的两种区，以及各用了什么GC算法，新生代怎么才能进入老年代等，以及平时需要调整的一些参数等
-### q2.2.Volatile的作用？Synchronized修饰静态变量和普通变量的区别？
-### q2.2.面向对象的三个特性（纳尼，哈哈，竟然这么简单）？java线程池的实现原理？
-### q2.2.问java虚拟机的东西，内存结构？GC等？常用的收集器及其特点？
-### q2.3.问到了一些java IO的内容
 ### q3.1.主要包括多线程、集合Set以及Map得底层实现原理
-### q3.2.Java的接口使用（此处结合抽象类），面向对象的三个特征，多态的理解以及使用
+[解答](../doc/java.collect/6-HashSet.HashMap.md)
+### q1.StringBuilder,StringBuffer的区别
+- 两个实现是一样，都是AbstractStringBuilder实现的，采用char[]的方式存储
+- StringBuffer采用了synchronized，是线程安全的，并且缓存了toStringCache，使得每次toString不需要重新生成
+### q1.ArrayList 的扩容过程
+[解答](../doc/java.collect/2-ArrayList.md)
+### q2.包括知道哪些集合类？ArrayList和LinkedList有什么区别？
+### q2.问了JVM的GC的内容。包括怎么分代，新生代的两种区，以及各用了什么GC算法，新生代怎么才能进入老年代等，以及平时需要调整的一些参数等
+### q2.2.问java虚拟机的东西，内存结构？GC等？常用的收集器及其特点？
+[解答](../book/深入理解JAVA虚拟机/第二部分.自动内存管理机制.md)
+### q2.2.Volatile的作用？Synchronized修饰静态变量和普通变量的区别？
 ### q3.2.Java中的锁机制以及几种锁的原理以及区别
+[解答](../book/深入理解JAVA虚拟机/第五部分.高效并发.md)
+### q2.2.面向对象的三个特性（纳尼，哈哈，竟然这么简单）？java线程池的实现原理？
+[解答](../doc/java.thread.md)
+### q2.3.问到了一些java IO的内容
+https://tech.meituan.com/nio.html
+
+### q3.2.Java的接口使用（此处结合抽象类），面向对象的三个特征，多态的理解以及使用
 ### q4.Collection中常见子类的内部实现，例如HashMap,Hashtable,ArrayList,ConcurrentHashMap等等
 ### q4.Java多线程和高并发相关，例如线程安全会涉及到synchronized关键字用法（同步块，同步方法，同步静态方法等）和锁机制lock，lock和synchronized和lock的区别
 ### q4.由上题引申到锁机制的内部实现（独占锁reentrantlock以及共享锁，读写锁）
@@ -61,31 +75,41 @@ http://www.importnew.com/22011.html
 ### q5.多线程编程的同步问题，几种实现方式。了不了解原子操作？
 ### q5.多线程的安全问题
 ### q5.JVM内存的划分，垃圾回收机制
+
 ### q5.内部类所使用的外部类中的变量为什么要用final修饰
+
+深入解析String#intern
+https://tech.meituan.com/in_depth_understanding_string_intern.html
 
 
 # 中间件/框架
 ### q1.Spring boot, 面试官就问这个跟 spring 有什么不同
+spring boot 依赖spring，摒弃了繁琐的xml配置改用代码的方式配置，而且很多配置都默认有了，其次spring boot集成了内嵌的tomact，让应用程序能够很简单的已jar方式来运行
 ### q2.问了Hibernate的优缺点
 ### q4.对spring中IOC和aop的理解，以及bean的加载机制
 
 # 其他
-### q1.线上问题排查
 ### q1.了解 http 吗,header 的大小有多大?浏览器缓存在 http header 上有什么体现, 我不要缓存呢?
-### q1.解释浏览器同源策略
-### q1.说出前端优化的常见策略
-### q2.网络的基本内容，包括了基本的三次握手、窗口机制、拥塞控制等。这些问题都详细得和他说了一遍
-### q2.2.网络的一些基本知识，TCP和UDP区别？五层结构？每层分别有哪些协议？
-### q3.1.计算机网络主要问了三次握手四次挥手
-### q3.2.Linux基本操作
-### q3.2.hash一致性的原理
-### q4.计算机网络相关知识，例如tcp和udp的功能和区别以及tcp的三次握手四次挥手（中间出现各种情况的也要了解）以及tcp保证可靠传输的机制有哪些，这些一定要吃透。有一个问题印象比较深刻:类似8080端口属于那一层的概念
 ### HTTP与HTTPS的区别
 ### HTTP请求报文格式
-### g1.网络部分，问到四层、7层和5层
-### g1.DNS的工作原理
-### g1.使用的是TCP还是UDP，以及TCP和UDP的区别
 ### g1.问到的是http和https以及原理
+### q1.解释浏览器同源策略
+### q1.说出前端优化的常见策略
+### g1.DNS的工作原理
+
+### q2.网络的基本内容，包括了基本的三次握手、窗口机制、拥塞控制等。这些问题都详细得和他说了一遍
+### q2.2.网络的一些基本知识，TCP和UDP区别？五层结构？每层分别有哪些协议？
+### q4.计算机网络相关知识，例如tcp和udp的功能和区别以及tcp的三次握手四次挥手（中间出现各种情况的也要了解）以及tcp保证可靠传输的机制有哪些，这些一定要吃透。有一个问题印象比较深刻:类似8080端口属于那一层的概念
+### q3.1.计算机网络主要问了三次握手四次挥手
+### g1.网络部分，问到四层、7层和5层
+### g1.使用的是TCP还是UDP，以及TCP和UDP的区别
+
+### q1.线上问题排查
+### q3.2.Linux基本操作
+### q3.2.hash一致性的原理
+
+
+
 
 
 # 求职者总结

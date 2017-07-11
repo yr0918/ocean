@@ -1,5 +1,8 @@
 # 分布式内存组件
 
+缓存那些事
+https://tech.meituan.com/cache_about.html
+
 分布式缓存hazelcast的一些原理分析
 http://wanghongji.iteye.com/blog/2047740
 

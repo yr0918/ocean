@@ -71,3 +71,17 @@ http://mp.weixin.qq.com/s/nh3GJneHwPFI9YBH5uJp1Q
 http://techshow.ctrip.com/archives/1722.html
 携程是如何借助“预测式外呼”提高呼叫效率的
 http://techshow.ctrip.com/archives/1540.html
+分布式系统互斥性与幂等性问题的分析与解决
+https://tech.meituan.com/distributed-system-mutually-exclusive-idempotence-cerberus-gtis.html
+分布式队列编程：模型、实战
+https://tech.meituan.com/distributed_queue_based_programming.html
+分布式队列编程优化篇
+https://tech.meituan.com/distributed_queue_based_programming-optimization.html
+性能优化模式
+https://tech.meituan.com/performance_tuning_pattern.html
+Java内存访问重排序的研究
+https://tech.meituan.com/java-memory-reordering.html
+MySQL索引原理及慢查询优化
+https://tech.meituan.com/mysql-index.html
+Emma使用与分析
+https://tech.meituan.com/emma.html
