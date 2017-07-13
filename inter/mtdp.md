@@ -14,7 +14,7 @@ q5.美团-大众点评面经：http://blog.csdn.net/vip_wangsai/article/details/
 ### q1.一张用户表, 找出每个城市有多少人
 select count(id) as num from user group by city_id
 ### q1.删除user表中的重复数据, 只保留一条
-delete from user where user_name in (select user_name from user group by user_name having count(user_name)>1) and id not exist(select min(id) from user group by user_name having count(user_name)>1)
+delete from user where user_name in (select user_name from user group by user_name having count(user_name)>1) and id not in(select min(id) from user group by user_name having count(user_name)>1)
 ### q1.数据库优化方面的一些心得
 [解答](../doc/database/db.mysql.md)
 ### q1.当多表关联查询很慢的时候, 有什么办法加速查询..?
@@ -48,6 +48,9 @@ public static int totalBill(int billCount) {
 ### q2.剑指offer那个之字形打印矩阵的题
 ### q2.2.一上来就是个top K的问题，然后问如何维护一个堆？接着是一个KMP的问题
 TOP K算法(和q1.m1一样)： http://blog.csdn.net/zhanzhan0329/article/details/18902153
+
+Top k问题的讨论（三种方法的java实现及适用范围）: http://www.cnblogs.com/big-sun/p/4085793.html
+
 KMP算法：http://blog.csdn.net/yutianzuijin/article/details/11954939/
 ### q3.1.基本的算法主要问了二分搜索，快排，二叉树的一道算法题
 ### q5.“aabbdddaef”,压缩之后的字符串为“a2b2d3a1e1f1”。不可以用高级的数据结构容器

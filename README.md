@@ -56,6 +56,10 @@ tcp/ip，http网络
   装饰器模式，观察者模式，责任链模式，单例模式，工场模式，
 JVM内存，堆栈结构；
 
+hibatnate原理，数据库事务（hibanete是用的数据库事务吗？事务重试？）
+hazelcast路由算法(新增、删除节点是否会暂停服务)、hazelcast原理
+分布式下的数据一致性和用户体验
+
 blcokingq实现？中间件的实现？分库分表，DB的优化？多线程？手写一个字符串转成double？
 http://mp.weixin.qq.com/s/f1VB0-go0WDUil2zmPVJfA
 http://mp.weixin.qq.com/s/CVlFWzZziI4RnNqwL50IxA
