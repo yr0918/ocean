@@ -1,4 +1,7 @@
-`1.AOP`（切面）
+# 1.AOP（切面）
+Spring AOP 代理有 CglibAopProxy 和 JdkDynamicAopProxy 两种，图 1 是以 CglibAopProxy 为例，对于 CglibAopProxy，需要调用其内部类的 DynamicAdvisedInterceptor 的 intercept 方法。对于 JdkDynamicAopProxy，需要调用其 invoke 方法
+
+
 Aspect Oriented Programming的缩写，意思是面向切面编程.与OOP(Object Oriented Programming)面向对象编程对等,都是一种编程思想
 
 从OOP角度分析,我们关注业务的处理逻辑,是属于纵向的行为,从AOP角度分析,我们关注对象行为发生时的问题，是属于横向的问题
@@ -34,4 +37,9 @@ Spring默认采取的动态代理机制实现AOP，当动态代理不可用时�
 依赖IOC容器并管理bean,有两种,一种是BeanFactory,另一种是ApplicationContext,但是APPlicationContext extends BeanFactory.
 
 核心:Spring中,bean工厂创建的各个实例称作bean
+
+# 事务
+
+透彻的掌握 Spring 中@transactional 的使用
+https://www.ibm.com/developerworks/cn/java/j-master-spring-transactional-use/index.html
 

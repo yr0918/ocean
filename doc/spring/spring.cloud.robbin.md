@@ -25,6 +25,7 @@ for middle tier services, It provides the following features
 
 ## 负载规则(Multiple and pluggable load balancing rules)？
 ## 怎么与Eureka无缝结合的(Integration with service discovery)？
+## 失败重试是怎么实现的？
 
 ## Spring Cloud Robbin
 
