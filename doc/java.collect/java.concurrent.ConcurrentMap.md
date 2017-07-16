@@ -5,43 +5,45 @@ http://www.cnblogs.com/huaizuo/archive/2016/04/20/5413069.html
 ConcurrentHashMap源码分析（JDK8版本）
 http://blog.csdn.net/u010723709/article/details/48007881
 
+# 核心方法概述
+
 1. CAS算法；unsafe.compareAndSwapInt(this, valueOffset, expect, update);  CAS(Compare And Swap)，意思是如果valueOffset位置包含的值与expect值相同，
     则更新valueOffset位置的值为update，并返回true，否则不更新，返回false。
 1. 与Java8的HashMap有相通之处，底层依然由“数组”+链表+红黑树；
 1. 底层结构存放的是TreeBin对象，而不是TreeNode对象；
-1. put方法基本逻辑
+### put方法基本逻辑
 ```
-    V putVal(K key, V value, boolean onlyIfAbsent) {
-        int hash = spread(key.hashCode());
-        //这边加了一个循环，就是不断的尝试，
-        //1.table的初始化和casTabAt用到了compareAndSwapInt、compareAndSwapObject，
-        //  如果其他线程在修改table，尝试就会失败，所以需要不断尝试
-        //2.系统在帮助扩容后，需要继续插入新节点
-        //3.除非成功插入，否则不退出循环
-        for (Node<K,V>[] tab = table;;) {
-            if (tab == null || (n = tab.length) == 0)------------------------------//初始化
-                tab = initTable();---------------//CAS无锁方式
-            else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {---------------//asTabAt无锁方式插入节点
-                if (casTabAt(tab, i, null, new Node<K,V>(hash, key, value, null)))
-                    break;
-            } else if ((fh = f.hash) == MOVED)-----------------------//检查到扩容，帮助其扩容；扩容完根据新的tab再添加
-                                                                     //帮助并行copy原数据到新的tab中
-                tab = helpTransfer(tab, f);----------------------//如果tab有nextTable节点，调用transfer直接进入复制阶段
-            else {
-                synchronized (f) {--------------------------------------------//锁住当前头结点
-                    if (fh >= 0) {-------------------------------------------//链表直接添加到尾部
+V putVal(K key, V value, boolean onlyIfAbsent) {
+    int hash = spread(key.hashCode());
+    //这边加了一个循环，就是不断的尝试，
+    //1.table的初始化和casTabAt用到了compareAndSwapInt、compareAndSwapObject，
+    //  如果其他线程在修改table，尝试就会失败，所以需要不断尝试
+    //2.系统在帮助扩容后，需要继续插入新节点
+    //3.除非成功插入，否则不退出循环
+    for (Node<K,V>[] tab = table;;) {
+        if (tab == null || (n = tab.length) == 0)------------------------------//初始化
+            tab = initTable();---------------//CAS无锁方式
+        else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {---------------//asTabAt无锁方式插入节点
+            if (casTabAt(tab, i, null, new Node<K,V>(hash, key, value, null)))
+                break;
+        } else if ((fh = f.hash) == MOVED)-----------------------//检查到扩容，帮助其扩容；扩容完根据新的tab再添加
+                                                                 //帮助并行copy原数据到新的tab中
+            tab = helpTransfer(tab, f);----------------------//如果tab有nextTable节点，调用transfer直接进入复制阶段
+        else {
+            synchronized (f) {--------------------------------------------//锁住当前头结点
+                if (fh >= 0) {-------------------------------------------//链表直接添加到尾部
 
-                    }else if (f instanceof TreeBin) {------------------------//红黑树方式添加
+                }else if (f instanceof TreeBin) {------------------------//红黑树方式添加
 
-                    }
-                    if (binCount >= TREEIFY_THRESHOLD)---------------------//转换为红黑树
                 }
+                if (binCount >= TREEIFY_THRESHOLD)---------------------//转换为红黑树
             }
         }
-        addCount(1L, binCount);-----------------------------//新增数量，检查是否需要扩容sumCount()>this.sizeCtl
     }
+    addCount(1L, binCount);-----------------------------//新增数量，检查是否需要扩容sumCount()>this.sizeCtl
+}
 ```
-1. transfor扩容方法（table的元素数量达到容量阈值sizeCtl）
+### transfor扩容方法（table的元素数量达到容量阈值sizeCtl）
 ```java
 整个扩容分为两部分：
 
@@ -72,25 +74,80 @@ void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
     boolean finishing = false; // to ensure sweep before committing nextTab
     for (int i = 0, bound = 0;;) {
         while (advance) {---------------------------//获取table的i
-
+            int nextIndex, nextBound;
+            if (--i >= bound || finishing)
+                advance = false;
+            // transferIndex = 0表示table中所有数组元素都已经有其他线程负责扩容
+            else if ((nextIndex = transferIndex) <= 0) {
+                i = -1;
+                advance = false;
+            }
+            // 尝试更新transferIndex，获取当前线程执行扩容复制的索引区间
+            // 更新成功，则当前线程负责完成索引为(nextBound，nextIndex)之间的桶首节点扩容
+            else if (U.compareAndSwapInt
+                     (this, TRANSFERINDEX, nextIndex,
+                      nextBound = (nextIndex > stride ?
+                                   nextIndex - stride : 0))) {
+                bound = nextBound;
+                i = nextIndex - 1;
+                advance = false;
+            }
         }
         if (i < 0 || i >= n || i + n >= nextn) {
-
+            int sc;
+            if (finishing) {// a
+                nextTable = null;
+                table = nextTab;
+                // 扩容成功，设置新sizeCtl，仍然为总大小的0.75
+                sizeCtl = (n << 1) - (n >>> 1);
+                return;
+            }
+            //利用CAS方法更新这个扩容阈值，在这里面sizectl值减一，说明新加入一个线程参与到扩容操作,参考sizeCtl的注释
+            if (U.compareAndSwapInt(this, SIZECTL, sc = sizeCtl, sc - 1)) {
+                //如果有多个线程进行扩容，那么这个值在第二个线程以后就不会相等，因为sizeCtl已经被减1了，所以后面的线程就只能直接返回,始终保证只有一个线程执行了 a(上面注释a)
+                if ((sc - 2) != resizeStamp(n) << RESIZE_STAMP_SHIFT)
+                    return;
+                finishing = advance = true;//finishing和advance保证线程已经扩容完成了可以退出循环
+                i = n; // recheck before commit
+            }
         }
         else if ((f = tabAt(tab, i)) == null)-----//当前没有节点，通过CAS插入ForwardingNode，用于告诉其它线程该槽位已经处理过了
             advance = casTabAt(tab, i, null, fwd);
         else if ((fh = f.hash) == MOVED)-------//已经被其他线程处理了，该节点的hash值为MOVED(-1)，则直接跳过，继续处理下一个槽位
             advance = true; // already processed
         else {
-            synchronized (f) {
-
+            synchronized (f) {--------------//单线程将数据从tab拷贝到nextTab中
+                if (fh >= 0) {--------------//链表
+                    ...省略
+                    for (Node<K,V> p = f; p != lastRun; p = p.next) {
+                        int ph = p.hash; K pk = p.key; V pv = p.val;
+                        if ((ph & n) == 0)
+                            ln = new Node<K,V>(ph, pk, pv, ln);
+                        else
+                            hn = new Node<K,V>(ph, pk, pv, hn);
+                    }
+                    setTabAt(nextTab, i, ln);--------//hash & n==0 更新到新tab的i桶中
+                    setTabAt(nextTab, i + n, hn);----//hash & n!=0 更新到新tab的i+n桶中
+                    setTabAt(tab, i, fwd);---------//将原tab标记正在扩容，
+                    advance = true;
+                } else if (f instanceof TreeBin) {-------//红黑树
+                    跟链表的实现逻辑差不多
+                    setTabAt(nextTab, i, ln);
+                    setTabAt(nextTab, i + n, hn);
+                    setTabAt(tab, i, fwd);
+                    advance = true;
+                }
             }
         }
     }
 }
 
 ```
-1. get方法基本逻辑
+
+![](png/concurrentHashMap.transfer.jpg)
+
+
+### get方法基本逻辑
 ```java
     public V get(Object key) {
         Node<K,V>[] tab; Node<K,V> e, p; int n, eh; K ek;
@@ -449,6 +506,8 @@ http://www.importnew.com/23907.html
 private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
     int n = tab.length, stride;
     if ((stride = (NCPU > 1) ? (n >>> 3) / NCPU : n) < MIN_TRANSFER_STRIDE)
+        // 单个线程允许处理的最少table桶首节点个数
+        // 即每个线程的处理任务量
         stride = MIN_TRANSFER_STRIDE; // subdivide range
     if (nextTab == null) {            // initiating
         try {
@@ -475,10 +534,13 @@ private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
             int nextIndex, nextBound;
             if (--i >= bound || finishing)
                 advance = false;
+            // transferIndex = 0表示table中所有数组元素都已经有其他线程负责扩容
             else if ((nextIndex = transferIndex) <= 0) {//nextIndex=transferIndex=n=tab.length(默认16)
                 i = -1;
                 advance = false;
             }
+            // 尝试更新transferIndex，获取当前线程执行扩容复制的索引区间
+            // 更新成功，则当前线程负责完成索引为(nextBound，nextIndex)之间的桶首节点扩容
             else if (U.compareAndSwapInt
                      (this, TRANSFERINDEX, nextIndex,
                       nextBound = (nextIndex > stride ?
@@ -495,6 +557,7 @@ private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
             if (finishing) {// a
                 nextTable = null;
                 table = nextTab;
+                // 扩容成功，设置新sizeCtl，仍然为总大小的0.75
                 sizeCtl = (n << 1) - (n >>> 1);
                 return;
             }
@@ -598,6 +661,7 @@ public V get(Object key) {
     Node<K,V>[] tab; Node<K,V> e, p; int n, eh; K ek;
     int h = spread(key.hashCode());
     if ((tab = table) != null && (n = tab.length) > 0 &&
+        // 唯一一处volatile读操作
         (e = tabAt(tab, (n - 1) & h)) != null) {
         if ((eh = e.hash) == h) {
             if ((ek = e.key) == key || (ek != null && key.equals(ek)))
