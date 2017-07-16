@@ -15,6 +15,9 @@ AOP就是把贯穿在各个模块之间相同的功能抽取出来，然后封�
 
 **AOP使用场景**，来封装横切关注点，具体可以在下面的场景中使用:
 
+Spring AOP原理
+http://blog.csdn.net/u010723709/article/details/47839307
+
 1. Authentication 权限
 1. Caching 缓存
 1. Context passing 内容传递

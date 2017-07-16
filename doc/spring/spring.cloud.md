@@ -6,6 +6,29 @@ Spring Cloud netflix中文文档
 https://www.springcloud.cc/spring-cloud-netflix.html
 https://www.springcloud.cc/spring-cloud-dalston.html
 
+# 分布式系统
+###  各个阶段的数据一致性问题
+
+分布式事务：不过是在一致性、吞吐量和复杂度之间，做一个选择
+https://yq.aliyun.com/articles/109238?spm=5176.100240.searchblog.170.ReaRFD
+
+微服务架构下的事务一致性保证
+https://yq.aliyun.com/articles/66109?spm=5176.8091938.0.0.betWSt
+
+### 各个阶段的高并发的问题
+
+大话程序猿眼里的高并发
+https://yq.aliyun.com/articles/110870?spm=5176.100240.searchblog.192.J8v18g
+
+横向
+加机器
+
+纵向
+读写分离
+read: 各个阶段加缓存
+write/update:操作异步，各个阶段减压
+
+
 # 6.服务路由
 1. 有服务调用延迟，一致性哈希的负载均衡
 1. 负载均衡、本地路由优先策略(服务消费者)、路由规则(全局规则，服务提供者规则、服务消 费者规则)

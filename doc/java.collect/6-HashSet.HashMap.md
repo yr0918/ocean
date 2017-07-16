@@ -277,6 +277,9 @@ final Node<K,V>[] resize() {
 ```
 
 ## 为啥不安全
+图说HashMap多线程并发问题分析
+https://yq.aliyun.com/articles/66683?spm=5176.8091938.0.0.imGNtZ
+
 1. 死循环：JDK8没有这个问题，JDK7由于resize的时候针对链表的转移是倒序，每次都会将顺序倒转，所以在多线程的情况下可能会出现在循环链，导致死循环
 
 2. fail-fast：如果在使用迭代器的过程中有其他线程修改了map，那么将抛出ConcurrentModificationException，这就是所谓fail-fast策略

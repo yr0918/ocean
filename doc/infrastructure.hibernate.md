@@ -1,5 +1,9 @@
 Hibernate框架的总结
 http://www.cnblogs.com/zhangzongle/p/5819505.html
+
+Spring 事务源码分析——Hibernate篇
+http://blog.csdn.net/u010723709/article/details/47903931
+
 ## hibernate 简介
 hibernate是一个开源框架，它是对象关联关系映射的框架，它对JDBC做了轻量级的封装，而我们java程序员可以使用面向对象的思想来操纵数据库
 

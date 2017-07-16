@@ -132,6 +132,9 @@ Semaphore维护了当前访问的个数，提供同步机制，控制同时访�
 
 #### 2.3 线程池（管理类）
 
+Java中的线程池——ThreadPoolExecutor的原理
+http://blog.csdn.net/u010723709/article/details/50372322
+
 ###### 常用方法介绍
 new  ThreadPoolExecutor(corePoolSize, maximumPoolSize, keepAliveTime, milliseconds,runnableTaskQueue, handler);
 - corePoolSize（线程池的基本大小）：当提交一个任务到线程池时，线程池会创建一个线程来执行任务，即使其他空闲的基本线程能够执行新任务也会创建线程，
