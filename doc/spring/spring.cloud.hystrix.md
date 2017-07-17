@@ -37,6 +37,8 @@ https://github.com/Netflix/Hystrix/wiki/Configuration
 
 ![](img/spring.cloud.hystrix.command.flow.png)
 
+![](img/spring.cloud.hystrix.breaker.png)
+
 ##### Isolation
 Hystrix employs the bulkhead pattern to isolate dependencies from each other and to limit concurrent access to any one of them
 
