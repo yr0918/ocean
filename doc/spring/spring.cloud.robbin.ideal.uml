@@ -10,11 +10,11 @@
     <node x="926.5" y="167.0">com.netflix.ribbon.http.HttpResourceObservableCommand</node>
     <node x="939.1620833333334" y="368.0">com.netflix.ribbon.http.HttpRequestBuilder</node>
     <node x="176.0" y="368.0">com.netflix.ribbon.http.HttpResourceGroup</node>
-    <node x="995.5" y="272.5">com.netflix.ribbon.http.HttpRequest</node>
     <node x="0.0" y="789.5">com.netflix.ribbon.transport.netty.udp.LoadBalancingUdpClient</node>
     <node x="632.3620833333334" y="368.0">com.netflix.ribbon.Ribbon</node>
-    <node x="313.6931818181818" y="629.5">com.netflix.loadbalancer.LoadBalancerContext</node>
+    <node x="995.5" y="272.5">com.netflix.ribbon.http.HttpRequest</node>
     <node x="190.0" y="272.5">com.netflix.ribbon.ResourceGroup</node>
+    <node x="313.6931818181818" y="629.5">com.netflix.loadbalancer.LoadBalancerContext</node>
     <node x="309.6931818181818" y="709.5">com.netflix.ribbon.transport.netty.LoadBalancingRxClient</node>
     <node x="534.75" y="789.5">com.netflix.ribbon.transport.netty.LoadBalancingRxClientWithPoolOptions</node>
     <node x="400.6066666666667" y="272.5">com.netflix.ribbon.RibbonResourceFactory</node>
@@ -72,100 +72,14 @@
       <point x="452.1931818181818" y="764.5" />
       <point x="47.5" y="15.0" />
     </edge>
-    <edge source="com.netflix.ribbon.proxy.processor.AnnotationProcessorsProvider" target="com.netflix.ribbon.proxy.processor.AnnotationProcessorsProvider">
-      <point x="-59.75" y="15.0" />
-      <point x="564.25" y="217.0" />
-      <point x="484.49999999999994" y="217.0" />
-      <point x="484.49999999999994" y="182.0" />
-      <point x="-119.5" y="-0.0" />
-    </edge>
     <edge source="com.netflix.ribbon.http.HttpRequest" target="com.netflix.ribbon.RibbonRequest">
       <point x="-42.66666666666663" y="-15.0" />
       <point x="1016.8333333333333" y="237.0" />
       <point x="835.0" y="237.0" />
       <point x="0.0" y="15.0" />
     </edge>
-    <edge source="com.netflix.client.config.ClientConfigFactory" target="com.netflix.client.config.ClientConfigFactory">
-      <point x="-64.5" y="15.0" />
-      <point x="245.66208333333338" y="127.0" />
-      <point x="204.16208333333338" y="127.0" />
-      <point x="204.16208333333338" y="92.0" />
-      <point x="-86.0" y="-0.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.transport.netty.RibbonTransport" target="com.netflix.ribbon.transport.netty.tcp.LoadBalancingTcpClient">
-      <point x="51.333333333333314" y="-15.0" />
-      <point x="349.20075757575756" y="938.5" />
-      <point x="572.0" y="938.5" />
-      <point x="0.0" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.http.HttpRequestTemplate" target="com.netflix.ribbon.http.HttpRequestBuilder">
-      <point x="0.0" y="-15.0" />
-      <point x="968.75" y="428.0" />
-      <point x="981.9120833333334" y="428.0" />
-      <point x="-42.75" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.http.HttpRequestTemplate" target="com.netflix.ribbon.http.HttpResourceGroup">
-      <point x="-36.799999999999955" y="-15.0" />
-      <point x="931.95" y="418.0" />
-      <point x="263.0" y="418.0" />
-      <point x="0.0" y="15.0" />
-    </edge>
     <edge source="com.netflix.ribbon.transport.netty.http.SSEClient" target="com.netflix.ribbon.transport.netty.http.LoadBalancingHttpClient">
       <point x="0.0" y="-15.0" />
-      <point x="0.0" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.http.HttpRequestBuilder" target="com.netflix.ribbon.http.HttpRequest">
-      <point x="0.0" y="-15.0" />
-      <point x="1024.6620833333334" y="345.25" />
-      <point x="1027.5" y="345.25" />
-      <point x="-32.0" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.transport.netty.RibbonTransport" target="com.netflix.ribbon.transport.netty.udp.LoadBalancingUdpClient">
-      <point x="-51.33333333333334" y="-15.0" />
-      <point x="246.5340909090909" y="938.5" />
-      <point x="100.5" y="938.5" />
-      <point x="0.0" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.http.HttpRequest" target="com.netflix.ribbon.http.HttpRequestTemplate">
-      <point x="32.0" y="15.0" />
-      <point x="1091.5" y="345.25" />
-      <point x="1120.6620833333334" y="345.25" />
-      <point x="1120.6620833333334" y="428.0" />
-      <point x="1042.35" y="428.0" />
-      <point x="73.59999999999991" y="-15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.RibbonResourceFactory" target="com.netflix.client.config.ClientConfigFactory">
-      <point x="0.0" y="-15.0" />
-      <point x="498.6066666666667" y="237.0" />
-      <point x="473.99999999999994" y="237.0" />
-      <point x="473.99999999999994" y="147.0" />
-      <point x="374.6620833333334" y="147.0" />
-      <point x="64.5" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.RibbonResourceFactory" target="com.netflix.ribbon.RibbonResourceFactory">
-      <point x="-49.0" y="15.0" />
-      <point x="449.6066666666667" y="322.5" />
-      <point x="380.6066666666667" y="322.5" />
-      <point x="380.6066666666667" y="287.5" />
-      <point x="-98.0" y="-0.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.http.HttpRequest" target="com.netflix.ribbon.hystrix.HystrixObservableCommandChain">
-      <point x="42.66666666666674" y="-15.0" />
-      <point x="1102.1666666666667" y="237.0" />
-      <point x="1342.5" y="237.0" />
-      <point x="0.0" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.RibbonTransportFactory" target="com.netflix.ribbon.RibbonTransportFactory">
-      <point x="-66.66666666666669" y="15.0" />
-      <point x="261.58333333333326" y="217.0" />
-      <point x="208.24999999999994" y="217.0" />
-      <point x="208.24999999999994" y="182.0" />
-      <point x="-100.0" y="-0.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.ResourceGroup" target="com.netflix.ribbon.RibbonTransportFactory">
-      <point x="36.5" y="-15.0" />
-      <point x="299.5" y="237.0" />
-      <point x="328.24999999999994" y="237.0" />
       <point x="0.0" y="15.0" />
     </edge>
     <edge source="com.netflix.ribbon.transport.netty.http.LoadBalancingHttpClient" target="com.netflix.ribbon.transport.netty.LoadBalancingRxClientWithPoolOptions">
@@ -174,39 +88,11 @@
       <point x="756.0" y="844.5" />
       <point x="73.75" y="15.0" />
     </edge>
-    <edge source="com.netflix.ribbon.http.HttpRequest" target="com.netflix.ribbon.http.HttpResourceObservableCommand">
-      <point x="0.0" y="-15.0" />
-      <point x="0.0" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.RibbonTransportFactory" target="com.netflix.client.config.ClientConfigFactory">
-      <point x="0.0" y="-15.0" />
-      <point x="328.24999999999994" y="147.0" />
-      <point x="331.6620833333334" y="147.0" />
-      <point x="21.5" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.transport.netty.LoadBalancingRxClient" target="com.netflix.loadbalancer.LoadBalancerContext">
-      <point x="-47.5" y="-15.0" />
-      <point x="357.1931818181818" y="684.5" />
-      <point x="359.1931818181818" y="684.5" />
-      <point x="-45.5" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.hystrix.HystrixObservableCommandChain" target="com.netflix.hystrix.HystrixObservableCommand">
-      <point x="0.0" y="-15.0" />
-      <point x="1342.5" y="147.0" />
-      <point x="1280.0983333333334" y="147.0" />
-      <point x="56.25" y="15.0" />
-    </edge>
     <edge source="com.netflix.ribbon.http.HttpRequestTemplate" target="com.netflix.ribbon.RequestTemplate">
       <point x="-73.60000000000002" y="-15.0" />
       <point x="895.1499999999999" y="428.0" />
       <point x="78.0" y="428.0" />
       <point x="0.0" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.Ribbon" target="com.netflix.ribbon.RibbonResourceFactory">
-      <point x="-23.25" y="-15.0" />
-      <point x="655.6120833333334" y="345.25" />
-      <point x="547.6066666666667" y="345.25" />
-      <point x="49.0" y="15.0" />
     </edge>
     <edge source="com.netflix.ribbon.transport.netty.udp.LoadBalancingUdpClient" target="com.netflix.ribbon.transport.netty.LoadBalancingRxClient">
       <point x="0.0" y="-15.0" />
@@ -220,51 +106,18 @@
       <point x="608.5" y="844.5" />
       <point x="-73.75" y="15.0" />
     </edge>
-    <edge source="com.netflix.ribbon.RibbonResourceFactory" target="com.netflix.ribbon.RibbonTransportFactory">
-      <point x="-65.33333333333331" y="-15.0" />
-      <point x="433.27333333333337" y="237.0" />
-      <point x="394.91666666666663" y="237.0" />
-      <point x="66.66666666666669" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.ResourceGroup" target="com.netflix.client.config.ClientConfigFactory">
-      <point x="-36.5" y="-15.0" />
-      <point x="226.5" y="237.0" />
-      <point x="197.75" y="237.0" />
-      <point x="197.75" y="147.0" />
-      <point x="288.6620833333334" y="147.0" />
-      <point x="-21.5" y="15.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.http.HttpRequestBuilder" target="com.netflix.ribbon.http.HttpRequestTemplate">
-      <point x="42.75" y="15.0" />
-      <point x="1067.4120833333334" y="418.0" />
-      <point x="1005.55" y="418.0" />
-      <point x="36.799999999999955" y="-15.0" />
-    </edge>
     <edge source="com.netflix.ribbon.http.HttpResourceObservableCommand" target="com.netflix.hystrix.HystrixObservableCommand">
       <point x="0.0" y="-15.0" />
       <point x="1059.5" y="147.0" />
       <point x="1167.5983333333334" y="147.0" />
       <point x="-56.25" y="15.0" />
     </edge>
-    <edge source="com.netflix.ribbon.http.HttpRequestTemplate" target="com.netflix.ribbon.http.HttpRequestTemplate">
-      <point x="0.0" y="15.0" />
-      <point x="968.75" y="498.0" />
-      <point x="856.75" y="498.0" />
-      <point x="856.75" y="463.0" />
-      <point x="-92.0" y="-0.0" />
-    </edge>
-    <edge source="com.netflix.ribbon.RibbonResourceFactory" target="com.netflix.ribbon.proxy.processor.AnnotationProcessorsProvider">
-      <point x="65.33333333333337" y="-15.0" />
-      <point x="563.94" y="237.0" />
-      <point x="683.75" y="237.0" />
-      <point x="59.75" y="15.0" />
-    </edge>
     <edge source="com.netflix.ribbon.http.HttpResourceGroup" target="com.netflix.ribbon.ResourceGroup">
       <point x="0.0" y="-15.0" />
       <point x="0.0" y="15.0" />
     </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.591715976331361" x="736.5" y="497.0" />
+  <settings layout="Hierarchic Group" zoom="0.591715976331361" x="737.0" y="497.0" />
   <SelectedNodes />
   <Categories />
   <SCOPE>All</SCOPE>

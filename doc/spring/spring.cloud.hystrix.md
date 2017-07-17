@@ -33,6 +33,29 @@ https://github.com/Netflix/Hystrix/wiki/Configuration
 - 在 Hystrix 绝大部分需要动态调整配置并快速部署到所有应用方面，提供优化以满足快速恢复的要求
 - 能保护应用不受依赖服务的整个执行过程中失败的影响，而不仅仅是网络请求
 
+动态演示：https://design.codelytics.io/hystrix/how-it-works
+
+![](img/spring.cloud.hystrix.command.flow.png)
+
+##### Isolation
+Hystrix employs the bulkhead pattern to isolate dependencies from each other and to limit concurrent access to any one of them
+
+THREAD — it executes on a separate thread and concurrent requests are limited by the number of threads in the thread-pool
+
+  coreSize = 10,maximumSize = 10,keepAliveTimeMinutes = 1,maxQueueSize = -1--maxQueueSize<=0?SynchronousQueue:LinkedBlockingQueue(maxQueueSize)
+
+SEMAPHORE — it executes on the calling thread and concurrent requests are limited by the semaphore count
+
+  maxConcurrentRequests=10
+
+##### Calculate Circuit Health
+Hystrix reports successes, failures, rejections, and timeouts to the circuit breaker, which maintains a rolling set of counters that calculate statistics.
+
+It uses these stats to determine when the circuit should “trip,” at which point it short-circuits any subsequent requests until a recovery period elapses,
+upon which it closes the circuit again after first checking certain health checks.
+
+![](img/spring.cloud.hystrix.metrics.png)
+
 #### Hystrix实现原理-命令模式
 - 将所有请求外部系统（或者叫依赖服务）的逻辑封装到 HystrixCommand或者HystrixObservableCommand（依赖RxJava）对象中
 - Run()方法为要实现的业务逻辑，这些逻辑将会在独立的线程中被执行当请求依赖服务时出现拒绝服务、超时或者短路（多个依
@@ -41,6 +64,8 @@ https://github.com/Netflix/Hystrix/wiki/Configuration
 #### Hystrix实现原理-舱壁模式
 - 货船为了进行防止漏水和火灾的扩散,会将货仓分隔为多个，当发生灾害时，将所在货仓进行隔离就可以降低整艘船的风险。
 #### Hystrix实现原理-隔离策略
+
+
 - 应用在复杂的分布式结构中，可能会依赖许多其他的服务，并且这些服务都不可避免地有失效的可能。如果一个应用没有与依赖服务的失效隔离开来，那么它将有可能因为依赖服务的失效而失效。
 - Hystrix将货仓模式运用到了服务调用者上。为每一个依赖服务维护一个线程池（或者信号量），当线程池占满，该依赖服务将会立即拒绝服务而不是排队等待。
 - 每个依赖服务都被隔离开来，Hystrix 会严格控制其对资源的占用，并在任何失效发生时，执行失败回退逻辑

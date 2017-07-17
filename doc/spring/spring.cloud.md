@@ -6,33 +6,51 @@ Spring Cloud netflix中文文档
 https://www.springcloud.cc/spring-cloud-netflix.html
 https://www.springcloud.cc/spring-cloud-dalston.html
 
-# 分布式系统
-###  各个阶段的数据一致性问题
-
-分布式事务：不过是在一致性、吞吐量和复杂度之间，做一个选择
-https://yq.aliyun.com/articles/109238?spm=5176.100240.searchblog.170.ReaRFD
-
-微服务架构下的事务一致性保证
-https://yq.aliyun.com/articles/66109?spm=5176.8091938.0.0.betWSt
-
-### 各个阶段的高并发的问题
-
-大话程序猿眼里的高并发
-https://yq.aliyun.com/articles/110870?spm=5176.100240.searchblog.192.J8v18g
-
-横向
-加机器
-
-纵向
-读写分离
-read: 各个阶段加缓存
-write/update:操作异步，各个阶段减压
-
+# Netflix的一个请求流程
+```
+请求A
+ |--通过阿里云的负载均衡路由到某台zuul服务器上
+ |--Tomcat(8默认使用nio接受，然后从线程池中获取一个线程进行处理)
+     |--Zuul(有动态设置filter的接口)
+         |----各种配置的Filter(授权，账号验证，合法性验证，请求监控等)
+         |----pre,routing,post,error处理
+         |--RibbonRoutingFilter进行rout时执行的run方法
+             |---构建RibbonCommandContext(serviceId,retryable,request等核心信息)
+             |   |----根据配置获取一个LoadBalancerContext(OkHttpLoadBalancingClient,RibbonLoadBalancingHttpClient等)
+             |   |--Hystrix
+             |     |----根据LoadBalancerContext生成一个HystrixCommand
+             |---根据RibbonCommandContext构建RibbonCommand(HystrixExecutable)
+                |---根据RibbonCommandFactory抽象工厂类构建RibbonCommand，子类OkHttpRibbonCommandFactory,HttpClientRibbonCommandFactory,RestClientRibbonCommandFactory
+                |   |---调用SpringClientFactory.getClient获取LoadBalancerContext的子类OkHttpLoadBalancingClient,RibbonLoadBalancingHttpClient
+                |   |---根据serviceId调用SpringClientFactory.getLoadBalancer获取ILoadBalancer
+                |   |---生成RibbonCommand(接口),子类有OkHttpRibbonCommand,HttpClientRibbonCommand,RestClientRibbonCommand都继承HystrixCommand
+                |
+                |---执行RibbonCommand.execute方法进行跳转，实际执行HystrixCommand.execute-->执行toObservable()
+                    |---一路执行到executeCommandWithSpecifiedIsolation方法(根据隔离策略执行如下代码THREAD或者SEMAPHORE)
+                    |   |---metrics.markCommandStart方法记录开始
+                    |   |---调用getUserExecutionObservable-->getExecutionObservable再执行run方法
+                    |       |---在HystrixCommand的run中执行LoadBalancerContext.executeWithLoadBalancer【一直阻塞，直到返回结果】
+                    |           |---使用构建器LoadBalancerCommand构建请求，执行submit提交
+                    |               |---调用LoadBalancerCommand.selectServer根据规则获取目标服务器(LoadBalancerContext.getServerFromLoadBalancer)【服务器列表的获取怎么处理的？】
+                    |               |---提交的Rxjava中的Observable中
+                    |                   |---调用LoadBalancerContext中的notexx方法进行ServerStats的记录(连接数、失败连接数、总数等)
+                    |                   |---调用LoadBalancerContext.execute方法-->调用子类OkHttpLoadBalancingClient,RibbonLoadBalancingHttpClient等execute
+                    |                   |     |---构建HttpClient
+                    |                   |     |---执行远程请求并返回结果
+                    |                   |
+                    |                   |---如果失败需要重试，调用Observable.retry执行重试
+                    |
+                    |---metrics.markCommandDone方法记录开始完成
+```
 
 # 6.服务路由
 1. 有服务调用延迟，一致性哈希的负载均衡
 1. 负载均衡、本地路由优先策略(服务消费者)、路由规则(全局规则，服务提供者规则、服务消 费者规则)
    三则是平等的关系，共同决定最终访问的服务器地址
+```
+配置同机器/服务器优先：需要自己实现，在机器的meta
+配置同机房有限：
+```
 
 # 7.容错策略
 针对各个服务调用采取的失败后的处理策略；hystrix是针对调用失败后的处理结果？
