@@ -8,6 +8,11 @@ https://yq.aliyun.com/articles/66109?spm=5176.8091938.0.0.betWSt
 大话程序猿眼里的高并发
 https://yq.aliyun.com/articles/110870?spm=5176.100240.searchblog.192.J8v18g
 
+# 项目
+RPO：招聘流程外包英文全称：Recruitment Process Outsourcing
+
+ATS：招聘管理平台Applicant Tracking Systems
+
 # 理论
 分布式中 CAP BASE ACID 理解
 http://blog.csdn.net/dellme99/article/details/15340955

@@ -6,6 +6,12 @@ Spring Cloud netflix中文文档
 https://www.springcloud.cc/spring-cloud-netflix.html
 https://www.springcloud.cc/spring-cloud-dalston.html
 
+# 微服务
+Microservice架构模式就是将整个Web应用组织为一系列小的Web服务。这些小的Web服务可以独立地编译及部署，并通过各自暴露的API接口相互通讯。它们彼此相互协作，作为一个整体为用户提供功能，却可以独立地进行扩容
+
+我的理解Microservice是SOA的传承，但一个最本质的区别就在于Smart endpoints and dumb pipes，或者说是真正的分布式的、去中心化的。Smart endpoints and dumb pipes本质就是去ESB，
+把所有的“思考”逻辑包括路由、消息解析等放在服务内部（Smart endpoints），去掉一个大一统的ESB，服务间轻（dumb pipes）通信，是比SOA更彻底的拆分
+
 # Netflix的一个请求流程
 ```
 请求A
