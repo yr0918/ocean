@@ -5,6 +5,9 @@
 缓存那些事
 https://tech.meituan.com/cache_about.html
 
+memcached各种应用分析
+http://blog.csdn.net/huilangeliuxin/article/details/38895607
+
 分布式缓存服务器设计原理
 http://www.cnblogs.com/liulun/p/3625941.html
 
