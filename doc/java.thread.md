@@ -7,7 +7,7 @@
 
 #### 线程状态
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.status.png)
+![](./img/java.thread.status.png)
 
 1. start:现成启动方法
 2. sleep:在指定的毫秒数内让当前正在执行的线程休眠（暂停执行），此操作受到系统计时器和调度程序精度和准确性的影响不能改变对象的机锁
@@ -23,6 +23,38 @@ t.join(1000);  //等待 t 线程，等待时间是1000毫秒
 
 实现：每个Thread都持有一个TreadLocalMap类型的变量（该类是一个轻量级的Map，功能与map一样，区别是桶里放的是entry而不是entry的链表。功能还是一个map。）以本身为key，以目标为value。
 主要方法是get()和set(T a)，set之后在map里维护一个threadLocal -> a，get时将a返回。ThreadLocal是一个特殊的容器
+```
+private static ThreadLocal<Integer> count = new ThreadLocal<>();
+private static ThreadLocal<Integer> sum = new ThreadLocal<>();
+Thread t1 = new Thread(() -> {
+    count.set(10);
+    sum.set(100);
+});
+t1.start();
+Thread t2 = new Thread(() -> {
+    count.set(20);
+    sum.set(200);
+});
+t2.start();
+
+Thread-1
+  |--ThreadLocalMap<ThreadLocal,value>
+        |--hash(count)-->10
+        |--hash(sum)-->100
+Thread-2
+  |--ThreadLocalMap<ThreadLocal,value>
+        |--hash(count)-->20
+        |--hash(sum)-->200
+
+ThreadLocal.get
+    |--ThreadLocalMap < Thread.currentThread().threadLocals
+        |--ThreadLocalMap.Entry < ThreadLocalMap.getEntry(this)  this是ThreadLocal
+            |--ThreadLocalMap.Entry.value
+
+ThreadLocal.set
+    |--ThreadLocalMap < Thread.currentThread().threadLocals
+        |--ThreadLocalMap.set(this,value)
+```
 
 ### 2. 多线程
 
@@ -38,8 +70,8 @@ t.join(1000);  //等待 t 线程，等待时间是1000毫秒
 2. 可见性：可见性是指当多个线程访问同一个变量时，一个线程修改了这个变量的值，其他线程能够立即看得到修改的值
 3. 有序性：即程序执行的顺序按照代码的先后顺序执行；happens-before规则
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.memory.1.png)
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.memory.2.png)
+![](./img/java.thread.memory.1.png)
+![](./img/java.thread.memory.2.png)
 
 #### 2.2 线程同步
 两种方式实现现成同步synchronized和Lock；使用规则可定时的、可轮询的与可中断的锁获取操作，公平队列，已经非块结构的锁使用Lock，否则优先使用synchronized
@@ -56,7 +88,7 @@ synchronize(obj) {}
 public static synchronize b(){}
 ```
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.synchronized.monitor.jpg)
+![](./img/java.thread.synchronized.monitor.jpg)
 
 tips：拥有monitor的是线程
 
@@ -83,19 +115,19 @@ ReentrantLock(重入锁)：
 
 初始化时， state=0，表示无人抢占了打水权。这时候，村民A来打水(A线程请求锁)，占了打水权，把state+1，如下所示：
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.reentrantLock1.png)
+![](./img/java.thread.reentrantLock1.png)
 
 线程A取得了锁，把 state原子性+1,这时候state被改为1，A线程继续执行其他任务，然后来了村民B也想打水（线程B请求锁），线程B无法获取锁，生成节点进行排队，如下图所示：
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.reentrantLock2.png)
+![](./img/java.thread.reentrantLock2.png)
 
 初始化的时候，会生成一个空的头节点，然后才是B线程节点，这时候，如果线程A又请求锁，是否需要排队？答案当然是否定的，否则就直接死锁了。当A再次请求锁，就相当于是打水期间，同一家人也来打水了，是有特权的，这时候的状态如下图所示：
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.reentrantLock3.png)
+![](./img/java.thread.reentrantLock3.png)
 
 到了这里，相信大家应该明白了什么是可重入锁了吧。就是一个线程在获取了锁之后，再次去获取了同一个锁，这时候仅仅是把状态值进行累加。如果线程A释放了一次锁，就成这样了：
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.reentrantLock4.png)
+![](./img/java.thread.reentrantLock4.png)
 
 仅仅是把状态值减了，只有线程A把此锁全部释放了，状态值减到0了，其他线程才有机会获取锁。当A把锁完全释放后，state恢复为0，然后会通知队列唤醒B线程节点，使B可以再次竞争锁。当然，如果B线程后面还有C线程，C线程继续休眠，除非B执行完了，通知了C线程。注意，当一个线程节点被唤醒然后取得了锁，对应节点会从队列中删除。
 
@@ -165,7 +197,7 @@ Java通过Executors提供四种线程池，分别为：
 
 ###### 线程池执行流程
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.pool.runtime.png)
+![](./img/java.thread.pool.runtime.png)
 
 ```java
 public void execute(Runnable command) {
@@ -202,7 +234,7 @@ public void run() {
 
 ###### 线程池状态
 
-![](https://github.com/yr0918/ocean/raw/master/doc/img/java.thread.pool.status.png)
+![](./img/java.thread.pool.status.png)
 
 `RUNNING状态：`
 创建线程池的时候，线程池的初始状态为 RUNNING，接着就可以提交任务执行了。

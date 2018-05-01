@@ -1,8 +1,27 @@
 import java.util.*;
 
 public class Main {
+    private static ThreadLocal<Integer> count = new ThreadLocal<>();
+    private static ThreadLocal<Integer> sum = new ThreadLocal<>();
 
     public static void main(String[] args) {
+
+        Thread t1 = new Thread(() -> {
+            count.set(10);
+            sum.set(100);
+        });
+        t1.start();
+        Thread t2 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                count.set(20);
+                sum.set(200);
+                while (true) {
+                }
+            }
+        });
+        t2.start();
+
         int[] data = new int[]{12, 98, 100, 28, 299, 39, 10, 28, 40};
         Print.print(data);
         System.out.println("binary search:" + Algorithm.binSearch(
