@@ -1,4 +1,4 @@
-package com.meiqu.resume.down.resource;
+package com.meiqu;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

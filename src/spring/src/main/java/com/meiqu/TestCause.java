@@ -1,4 +1,4 @@
-package com.meiqu.resume.down.resource;
+package com.meiqu;
 
 /**
  * @author yerong
